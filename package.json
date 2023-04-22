@@ -1,0 +1,52 @@
+{
+    "name": "stewpidbot-v14",
+    "version": "1.0.0",
+    "description": "A private Discord bot",
+    "main": "index.js",
+    "Author": "markpaul099",
+    "license": "Apache-2.0",
+    "homepage": "https://github.com/markpaul099/stewpidbot-v14#readme",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/markpaul099/stewpidbot-v14.git"
+    },
+    "dependencies": {
+        "@discord-player/extractor": "^4.2.1",
+        "@discordjs/opus": "^0.9.0",
+        "@discordjs/voice": "^0.16.0",
+        "@markpaul099/discord-xp": "^1.0.4",
+        "add": "^2.0.6",
+        "async": "^3.2.4",
+        "canvacord": "^5.4.8",
+        "canvas": "^2.11.2",
+        "cron": "^2.3.0",
+        "discord-api-types": "^0.37.37",
+        "discord-gamecord": "^4.4.0",
+        "discord-player": "^6.2.1",
+        "discord.js": "^14.9.0",
+        "discordjs-reaction-role": "^3.1.0",
+        "ffmpeg-static": "^5.1.0",
+        "fs": "0.0.1-security",
+        "lodash": "^4.17.21",
+        "moment": "^2.29.4",
+        "moment-duration-format": "^2.3.2",
+        "mongoose": "^6.10.5",
+        "opusscript": "^0.0.8",
+        "os": "^0.1.2",
+        "path": "^0.12.7",
+        "pm2": "^5.3.0",
+        "ytdl-core": "^4.11.4"
+    },
+    "script": {
+        "lint": "eslint"
+    },
+    "keywords": [
+        "Discord",
+        "Bot"
+    ],
+    "devDependencies": {
+        "@typescript-eslint/eslint-plugin": "^5.45.1",
+        "@typescript-eslint/parser": "^5.45.1",
+        "eslint": "^8.38.0"
+    }
+}

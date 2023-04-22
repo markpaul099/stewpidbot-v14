@@ -1,0 +1,3 @@
+# Stewpid Bot
+
+A simple Personal General Bot that can play music, play games, manage message, etc...
