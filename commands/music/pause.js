@@ -16,8 +16,7 @@ module.exports = {
 
 		// Check if the queue is empty
 		if (!queue) {
-			await interaction.editReply("There are no songs in the queue.");
-			return;
+			return await interaction.editReply("There are no songs in the queue.");
 		}
 
 		// If the member is not in a voice channel, return
