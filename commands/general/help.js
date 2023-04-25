@@ -35,8 +35,10 @@ module.exports = {
 ` },
 			{ name: "Music", value: `Only work in <#${COMMAND_CH}>
 **/clearqueue** - Clear all the music in the queue
+**/current** - Shows the song currently playing
 **/exit** - Kick the bot from the voice channel
 **/loop** - Enable or disable looping of songs or the whole queue
+**/lyrics** - Current song lyrics
 **/pause** - Pauses the current song
 **/play** - Play a song from YouTube, Spotify or Soundcloud
 **/previous** - Replays previous song
