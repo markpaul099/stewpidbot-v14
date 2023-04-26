@@ -7,9 +7,8 @@ module.exports = {
 		.setName("queue")
 		.setDescription("shows first 10 songs in the queue"),
 	async execute(interaction) {
+		await interaction.deferReply();
 		try {
-			// Let the Discord Client know the bot is alive
-			await interaction.deferReply();
 
 			const player = useMasterPlayer();
 			// Get the queue for the server
