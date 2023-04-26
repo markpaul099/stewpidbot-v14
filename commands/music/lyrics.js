@@ -22,7 +22,6 @@ module.exports = {
 
 
 			const result = await lyrics.search(queue.currentTrack.title);
-			console.log(result);
 
 			if (!result) {
 				embed
