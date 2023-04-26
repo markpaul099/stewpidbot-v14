@@ -13,6 +13,7 @@
     "ROLE_ID": "",
     "WELCOME_CH": "",
     "ANNOUNCEMENT_CH": "",
-    "LOGS_CH": ""
+    "LOGS_CH": "",
+    "GeniusApiToken":""
 }
 

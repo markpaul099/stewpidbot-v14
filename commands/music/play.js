@@ -33,148 +33,154 @@ module.exports = {
 						.setDescription("the song's url")
 						.setRequired(true))),
 	async execute(interaction) {
-		// Let the Discord Client know the bot is alive
 		await interaction.deferReply();
+		try {
+			const channel = interaction.member.voice.channel;
+			// Make sure the user is inside a voice channel
+			if (!interaction.member.voice.channel) return interaction.editReply("You need to be in a Voice Channel to play a song.");
 
-		// Make sure the user is inside a voice channel
-		if (!interaction.member.voice.channel) return interaction.editReply("You need to be in a Voice Channel to play a song.");
-
-		const player = useMasterPlayer();
-		// Create a play queue for the server
-		// const queue = await player.createQueue(interaction.guild);
-		const queue = player.nodes.create(interaction.guild, {
-			metadata: interaction,
-			selfDeaf: true,
-			leaveOnEmpty: true,
-			leaveOnEmptyCooldown: 600000, // Bot leaves Voice Channel after ten minutes if Voice Channel is empty
-			leaveOnEnd: false,
-		});
-
-		// Wait until you are connected to the channel
-		if (interaction.client.voice.adapters.size == 0) {
-			await queue.connect(interaction.member.voice.channel);
-		}
-
-		// Check if member is in a different voice channel
-		if (interaction.member.voice.channel !== queue.channel) {
-			return await interaction.editReply("You are in a different voice channel");
-		}
-
-		const embed = new EmbedBuilder();
-
-		if (interaction.options.getSubcommand() === "song") {
-			const url = interaction.options.getString("url");
-			let result;
-			// Search for the song using the discord-player
-			if (url.includes("youtube") || url.includes("youtu.be")) {
-				result = await player.search(url, {
-					requestedBy: interaction.user,
-					searchEngine: QueryType.YOUTUBE_VIDEO,
-				});
-			} else if (url.includes("spotify")) {
-				result = await player.search(url, {
-					requestedBy: interaction.user,
-					searchEngine: QueryType.SPOTIFY_SONG });
-			} else if (url.includes("soundcloud")) {
-				result = await player.search(url.split("?")[0], {
-					requestedBy: interaction.user,
-					searchEngine: QueryType.SOUNDCLOUD_TRACK });
-			}
-
-			// finish if no tracks were found
-			if (result.tracks.length === 0) {return interaction.editReply("No results");}
-
-			// Add the track to the queue
-			const song = result.tracks[0];
-			try {
-				await player.play(interaction.member.voice.channel, song.url, {
-					nodeOptions: {
-
-					},
-				});
-				embed
-					.setColor("#152739")
-					.setAuthor({ name: `${interaction.client.user.username}`, iconURL: interaction.client.user.displayAvatarURL({ dynamic: true, size: 2048, extension: "png" }) })
-					.setDescription(`**[${song.title}](${song.url})**\nhas been added to the Queue`)
-					.setThumbnail(song.thumbnail)
-					.setFooter({ text: `Duration: ${song.duration}` });
-			} catch (e) {
-				return interaction.followUp(e);
-			}
-
-		} else if (interaction.options.getSubcommand() === "playlist") {
-
-			// Search for the playlist using the discord-player
-			const url = interaction.options.getString("url");
-			let result;
-
-			if (url.includes("youtube") || url.includes("youtu.be")) {
-				result = await player.search(url, {
-					requestedBy: interaction.user,
-					searchEngine: QueryType.YOUTUBE_PLAYLIST,
-				});
-			} else if (url.includes("spotify")) {
-				result = await player.search(url, {
-					requestedBy: interaction.user,
-					searchEngine: QueryType.SPOTIFY_PLAYLIST,
-				});
-			}
-
-			if (result.tracks.length === 0) {return interaction.editReply(`No playlists found with ${url}`);}
-
-			const playlist = result.playlist;
-
-			try {
-				await player.play(interaction.member.voice.channel, playlist, {
-					nodeOptions: {
-
-					},
-				});
-				embed
-					.setColor("#152739")
-					.setAuthor({ name: `${interaction.client.user.username}`, iconURL: interaction.client.user.displayAvatarURL({ dynamic: true, size: 2048, extension: "png" }) })
-					.setDescription(`**${result.tracks.length} songs from [${playlist.title}](${playlist.url})** have been added to the Queue.`);
-			} catch (e) {
-				return interaction.followUp(e);
-			}
-
-
-		} else if (interaction.options.getSubcommand() === "search") {
-			// Search for the song using the discord-player
-			const url = interaction.options.getString("searchterms");
-			const result = await player.search(url, {
-				requestedBy: interaction.user,
-				searchEngine: QueryType.AUTO,
+			const player = useMasterPlayer();
+			// Create a play queue for the server
+			// const queue = await player.createQueue(interaction.guild);
+			const queue = player.nodes.create(interaction.guild, {
+				metadata: interaction,
+				selfDeaf: true,
+				leaveOnEmpty: true,
+				leaveOnEmptyCooldown: 600000, // Bot leaves Voice Channel after ten minutes if Voice Channel is empty
+				leaveOnEnd: false,
 			});
 
-
-			// finish if no tracks were found
-			if (result.tracks.length === 0) {return interaction.editReply("No results.");}
-
-			// Add the track to the queue
-			const song = result.tracks[0];
-
-			try {
-				await player.play(interaction.member.voice.channel, song.url, {
-					nodeOptions: {
-
-					},
-				});
-				embed
-					.setColor("#152739")
-					.setAuthor({ name: `${interaction.client.user.username}`, iconURL: interaction.client.user.displayAvatarURL({ dynamic: true, size: 2048, extension: "png" }) })
-					.setDescription(`**[${song.title}](${song.url})** has been added to the Queue.`)
-					.setThumbnail(song.thumbnail)
-					.setFooter({ text: `Duration: ${song.duration}` });
-			} catch (e) {
-				return interaction.followUp(e);
+			// Wait until you are connected to the channel
+			if (interaction.client.voice.adapters.size == 0) {
+				await queue.connect(interaction.member.voice.channel);
 			}
+
+			// Check if member is in a different voice channel
+			if (!channel) {
+				return interaction.editReply("You are not connected to a voice channel.");
+			} else if (channel !== queue.channel) {
+				return interaction.editReply("You are in a different channel");
+			}
+
+			const embed = new EmbedBuilder();
+
+			if (interaction.options.getSubcommand() === "song") {
+				const url = interaction.options.getString("url");
+				let result;
+				// Search for the song using the discord-player
+				if (url.includes("youtube") || url.includes("youtu.be")) {
+					result = await player.search(url, {
+						requestedBy: interaction.user,
+						searchEngine: QueryType.YOUTUBE_VIDEO,
+					});
+				} else if (url.includes("spotify")) {
+					result = await player.search(url, {
+						requestedBy: interaction.user,
+						searchEngine: QueryType.SPOTIFY_SONG });
+				} else if (url.includes("soundcloud")) {
+					result = await player.search(url.split("?")[0], {
+						requestedBy: interaction.user,
+						searchEngine: QueryType.SOUNDCLOUD_TRACK });
+				}
+
+				// finish if no tracks were found
+				if (result.tracks.length === 0) {return interaction.editReply("No results");}
+
+				// Add the track to the queue
+				const song = result.tracks[0];
+				try {
+					await player.play(interaction.member.voice.channel, song.url, {
+						nodeOptions: {
+
+						},
+					});
+					embed
+						.setColor("#152739")
+						.setAuthor({ name: `${interaction.client.user.username}`, iconURL: interaction.client.user.displayAvatarURL({ dynamic: true, size: 2048, extension: "png" }) })
+						.setDescription(`**[${song.title}](${song.url})**\nhas been added to the Queue`)
+						.setThumbnail(song.thumbnail)
+						.setFooter({ text: `Duration: ${song.duration}` });
+				} catch (e) {
+					return interaction.followUp(e);
+				}
+
+			} else if (interaction.options.getSubcommand() === "playlist") {
+
+				// Search for the playlist using the discord-player
+				const url = interaction.options.getString("url");
+				let result;
+
+				if (url.includes("youtube") || url.includes("youtu.be")) {
+					result = await player.search(url, {
+						requestedBy: interaction.user,
+						searchEngine: QueryType.YOUTUBE_PLAYLIST,
+					});
+				} else if (url.includes("spotify")) {
+					result = await player.search(url, {
+						requestedBy: interaction.user,
+						searchEngine: QueryType.SPOTIFY_PLAYLIST,
+					});
+				}
+
+				if (result.tracks.length === 0) {return interaction.editReply(`No playlists found with ${url}`);}
+
+				const playlist = result.playlist;
+
+				try {
+					await player.play(interaction.member.voice.channel, playlist, {
+						nodeOptions: {
+
+						},
+					});
+					embed
+						.setColor("#152739")
+						.setAuthor({ name: `${interaction.client.user.username}`, iconURL: interaction.client.user.displayAvatarURL({ dynamic: true, size: 2048, extension: "png" }) })
+						.setDescription(`**${result.tracks.length} songs from [${playlist.title}](${playlist.url})** have been added to the Queue.`);
+				} catch (e) {
+					return interaction.followUp(e);
+				}
+
+
+			} else if (interaction.options.getSubcommand() === "search") {
+			// Search for the song using the discord-player
+				const url = interaction.options.getString("searchterms");
+				const result = await player.search(url, {
+					requestedBy: interaction.user,
+					searchEngine: QueryType.AUTO,
+				});
+
+
+				// finish if no tracks were found
+				if (result.tracks.length === 0) {return interaction.editReply("No results.");}
+
+				// Add the track to the queue
+				const song = result.tracks[0];
+
+				try {
+					await player.play(interaction.member.voice.channel, song.url, {
+						nodeOptions: {
+
+						},
+					});
+					embed
+						.setColor("#152739")
+						.setAuthor({ name: `${interaction.client.user.username}`, iconURL: interaction.client.user.displayAvatarURL({ dynamic: true, size: 2048, extension: "png" }) })
+						.setDescription(`**[${song.title}](${song.url})** has been added to the Queue.`)
+						.setThumbnail(song.thumbnail)
+						.setFooter({ text: `Duration: ${song.duration}` });
+				} catch (e) {
+					return interaction.followUp(e);
+				}
+			}
+			if (queue.size < 1) {
+				return interaction.editReply("Queue created");
+			}
+			await interaction.editReply({
+				embeds: [embed],
+			});
+		} catch (error) {
+			console.error(error);
+			await interaction.editReply({ content: "There was an error while executing this command." });
 		}
-		if (queue.size < 1) {
-			return interaction.editReply("Queue created");
-		}
-		await interaction.editReply({
-			embeds: [embed],
-		});
 	},
 };
