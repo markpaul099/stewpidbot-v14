@@ -19,6 +19,7 @@ commands-old
 index-old.js
 example-command.js
 react-config.js
+commands/admin/test.js
 
 # Runtime data
 pids
