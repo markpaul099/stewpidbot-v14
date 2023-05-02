@@ -3,7 +3,7 @@ const { SlashCommandBuilder, PermissionFlagsBits, ChannelType } = require("disco
 module.exports = {
 	data: new SlashCommandBuilder()
 		.setName("editmessage")
-		.setDescription("Edit an already sent embed")
+		.setDescription("Edit an already sent message")
 		.addChannelOption(option =>
 			option
 				.setName("channel")
