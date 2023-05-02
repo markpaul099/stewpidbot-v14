@@ -29,13 +29,13 @@ module.exports = {
 				.setDescription("Text inside the embed"))
 		.setDefaultMemberPermissions(PermissionFlagsBits.Administrator),
 	async execute(interaction) {
-		const ChannelID = interaction.options.getChannel("channel");
+		const Channel = interaction.options.getChannel("channel");
 		const messageID = interaction.options.getString("message");
 		const title = interaction.options.getString("title");
 		const description = interaction.options.getString("description").replace(/\\n/g, "\r\n");
 		const color = interaction.options.getString("color");
 
-		const channel = await interaction.guild.channels.fetch(ChannelID.id);
+		const channel = await interaction.guild.channels.fetch(Channel.id);
 		const message = await channel.messages.fetch(messageID);
 
 		const embed = EmbedBuilder.from(message.embeds[0])
