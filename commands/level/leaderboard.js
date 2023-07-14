@@ -24,10 +24,15 @@ module.exports = {
 
 		// We map the outputs.
 		const lb = leaderboard.map(e => {
-			if (!e.nickname) {
-				return `${e.position}. **${e.username}#${e.discriminator}** \nLevel: ${e.level}\nXP: ${e.xp.toLocaleString()}`;
-			} else {
-				return `${e.position}. **${e.nickname}** \nLevel: ${e.level}\nXP: ${e.xp.toLocaleString()}`;
+			console.log(e);
+			if (!e.nickname && e.discriminator == "0") {
+				return `${e.position}. **${e.username}**\nLevel: ${e.level}\nXP: ${e.xp.toLocaleString()}`;
+			} else if (!e.nickname && e.discriminator !== "0") {
+				return `${e.position}. **${e.username}#${e.discriminator}**\nLevel: ${e.level}\nXP: ${e.xp.toLocaleString()}`;
+			} else if (e.nickname && e.discriminator !== "0") {
+				return `${e.position}. **${e.nickname}**\n${e.username}#${e.discriminator}\nLevel: ${e.level}\nXP: ${e.xp.toLocaleString()}`;
+			} else if (e.nickname && e.discriminator == "0") {
+				return `${e.position}. **${e.nickname}**\n@${e.username}\nLevel: ${e.level}\nXP: ${e.xp.toLocaleString()}`;
 			}
 		});
 
