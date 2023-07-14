@@ -40,15 +40,30 @@ module.exports = {
 			.setLevel(user.level) // Current Level of the user
 			.setProgressBar("#2B65EC");
 
-		if (!name.nickname) {
+		if (!name.nickname && target.discriminator == "0") {
+			rank
+				.setUsername(target.username)
+				.setDiscriminator(target.username);
+			console.log("option 1");
+		} else if (!name.nickname && target.discriminator !== "0") {
 			rank
 				.setUsername(target.username)
 				.setDiscriminator(target.discriminator);
-		} else {
-			rank.renderEmojis(true)
+			console.log("option 2");
+		} else if (name.nickname && target.discriminator !== "0") {
+			rank
+				.renderEmojis(true)
 				.setUsername(name.nickname)
 				.setDiscriminator(target.discriminator);
+			console.log("option 3");
+		} else if (name.nickname && target.discriminator == "0") {
+			rank
+				.renderEmojis(true)
+				.setUsername(name.nickname)
+				.setDiscriminator(target.username);
+			console.log("option 4");
 		}
+		console.log(target);
 		// Send Attachement
 		rank.build()
 			.then(buffer => {
