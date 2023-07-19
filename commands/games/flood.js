@@ -5,17 +5,17 @@ module.exports = {
 	data: new SlashCommandBuilder()
 		.setName("flood")
 		.setDescription("A flood Game")
-		.addStringOption(option =>
+		.addNumberOption(option =>
 			option
 				.setName("dificulty")
 				.setDescription("'Trivia's dificulty")
 				.addChoices(
-					{ name: "Easy", value: "8" },
-					{ name: "Medium", value: "13" },
-					{ name: "Hard", value: "18" },
+					{ name: "Easy = 8", value: 8 },
+					{ name: "Medium = 13", value: 13 },
+					{ name: "Hard = 18", value: 18 },
 				)),
 	async execute(interaction) {
-		const dificulty = interaction.options.getString("dificulty") || "13";
+		const dificulty = interaction.options.getNumber("dificulty") || 13;
 
 		const Game = new Flood({
 			message: interaction,
