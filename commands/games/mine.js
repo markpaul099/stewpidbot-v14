@@ -5,17 +5,17 @@ module.exports = {
 	data: new SlashCommandBuilder()
 		.setName("mine")
 		.setDescription("Minesweeper!!!")
-		.addStringOption(option =>
+		.addNumberOption(option =>
 			option
 				.setName("dificulty")
 				.setDescription("'Number of mines")
 				.addChoices(
-					{ name: "Easy = 3", value: "3" },
-					{ name: "Medium = 5", value: "5" },
-					{ name: "Hard = 8", value: "8" },
+					{ name: "Easy = 3", value: 3 },
+					{ name: "Medium = 5", value: 5 },
+					{ name: "Hard = 8", value: 8 },
 				)),
 	async execute(interaction) {
-		const dificulty = interaction.options.getString("dificulty") || "5";
+		const dificulty = interaction.options.getNumber("dificulty") || 5;
 
 		const Game = new Minesweeper({
 			message: interaction,
