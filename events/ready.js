@@ -22,12 +22,11 @@ ${client.channels.cache.size} channels and ${client.users.cache.size} users cach
 `);
 		// Set Bot's Pressence/Activity
 		const guild = client.guilds.cache.get(GUILD_ID);
-		const memberCount = guild.members.cache.filter(member => !member.user.bot).size;
-		const list = [
-			{ type: ActivityType.Watching, name: "for /help" },
-			{ type: ActivityType.Watching, name: `Members: ${memberCount}` },
-		];
 		setInterval(() => {
+			const list = [
+				{ type: ActivityType.Watching, name: "for /help" },
+				{ type: ActivityType.Watching, name: `Members: ${guild.members.cache.filter(member => !member.user.bot).size}` },
+			];
 			const index = Math.floor(Math.random() * list.length);
 			client.user.setPresence({ activities: [{ name: list[index].name, type: list[index].type }], status: "online" });
 		}, 10000);
