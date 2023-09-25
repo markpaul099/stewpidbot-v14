@@ -1,5 +1,5 @@
 const { SlashCommandBuilder } = require("@discordjs/builders");
-const { useMasterPlayer } = require("discord-player");
+const { useMainPlayer } = require("discord-player");
 const { EmbedBuilder } = require("discord.js");
 
 module.exports = {
@@ -10,7 +10,7 @@ module.exports = {
 		await interaction.deferReply();
 		try {
 
-			const player = useMasterPlayer();
+			const player = useMainPlayer();
 			// Get the queue for the server
 			const queue = player.nodes.get(interaction.guildId);
 

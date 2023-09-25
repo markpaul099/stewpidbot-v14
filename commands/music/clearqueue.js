@@ -32,11 +32,6 @@ module.exports = {
 					content: "You are not connected to a voice channel.",
 					ephemeral: true,
 				});
-			} 	else if (channel !== queue.channel) {
-				return interaction.editReply({
-					content: "You are in a different voice channel.",
-					ephemeral: true,
-				});
 			}
 
 			queue.clear();

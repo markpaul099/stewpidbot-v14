@@ -1,11 +1,12 @@
 const { SlashCommandBuilder } = require("discord.js");
-const { INV_LINK } = require("../../config.json");
 
 module.exports = {
 	data: new SlashCommandBuilder()
 		.setName("invite")
 		.setDescription("Invite link"),
 	async execute(interaction) {
-		await interaction.reply({ content: INV_LINK });
+		const welcome = await interaction.guild.channels.cache.find(channel => channel.name === "welcome");
+		const inv = await welcome.createInvite();
+		interaction.reply(`Invite link: ${inv}`);
 	},
 };

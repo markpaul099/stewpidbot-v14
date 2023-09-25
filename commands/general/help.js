@@ -1,11 +1,11 @@
 const { SlashCommandBuilder, EmbedBuilder } = require("discord.js");
-const { COMMAND_CH } = require("../../config.json");
 
 module.exports = {
 	data: new SlashCommandBuilder()
 		.setName("help")
 		.setDescription("Available Commands"),
 	async execute(interaction) {
+		const COMMAND_CH = await interaction.guild.channels.cache.find(channel => channel.name === "bot-commands");
 		const embed = new EmbedBuilder()
 			.setColor("#2B65EC")
 			.setTitle("Commands")
@@ -17,7 +17,7 @@ module.exports = {
 **/server** - See server stats
 **/uptime** - Bot's uptime\n
 ` },
-			{ name: "Games", value: `Only work in <#${COMMAND_CH}>
+			{ name: "Games", value: `Only work in ${COMMAND_CH}
 **/2048** - Slide the Tiles
 **/connect** - Connect 4 Dots
 **/findfruit** - Find Fruit
@@ -29,11 +29,11 @@ module.exports = {
 **/ttt** - Tic Tac Toe!
 **/trivia** - Guess the Answer\n
 ` },
-			{ name: "Levels", value: `Only work in <#${COMMAND_CH}>
+			{ name: "Levels", value: `Only work in ${COMMAND_CH}
 **/leaderboard** - Guild Ranking
 **/level** - Check User Level\n
 ` },
-			{ name: "Music", value: `Only work in <#${COMMAND_CH}>
+			{ name: "Music", value: `Only work in ${COMMAND_CH}
 **/clearqueue** - Clear all the music in the queue
 **/current** - Shows the song currently playing
 **/exit** - Kick the bot from the voice channel

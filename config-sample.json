@@ -1,19 +1,9 @@
 {
     "token": "",
     "prefix":"",
-    "COMMAND_CH":"",
     "MONGO_URL":"",
-    "INV_LINK":"",
-    "REQUEST_CH":"",
     "BOT_OWNER_ID":"",
-    "SERVER_OWNER_ID":"",
-    "SERVER_OWNER_NAME":"",
-    "GUILD_ID": "",
     "ClientID":"",
-    "ROLE_ID": "",
-    "WELCOME_CH": "",
-    "ANNOUNCEMENT_CH": "",
-    "LOGS_CH": "",
     "GeniusApiToken":""
 }
 

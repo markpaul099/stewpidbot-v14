@@ -1,12 +1,11 @@
 const { Events } = require("discord.js");
-const { COMMAND_CH } = require("../config.json");
 const Levels = require("@markpaul099/discord-xp");
 
 module.exports = {
 	name: Events.MessageCreate,
 	once: false,
 	async execute(message) {
-		const channel = await message.guild.channels.fetch(COMMAND_CH);
+		const channel = await message.guild.channels.cache.find(channel => channel.name === "bot-commands");
 		if (!message.guild) return;
 		if (message.author.bot) return;
 

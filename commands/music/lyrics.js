@@ -1,5 +1,5 @@
 const { SlashCommandBuilder, EmbedBuilder } = require("discord.js");
-const { useMasterPlayer } = require("discord-player");
+const { useMainPlayer } = require("discord-player");
 const { lyricsExtractor } = require("@discord-player/extractor");
 const { GeniusApiToken } = require("../../config.json");
 
@@ -11,7 +11,7 @@ module.exports = {
 		await interaction.deferReply();
 		try {
 			const lyrics = lyricsExtractor(GeniusApiToken);
-			const player = useMasterPlayer();
+			const player = useMainPlayer();
 			const queue = player.nodes.get(interaction.guildId);
 
 			if (!queue) {

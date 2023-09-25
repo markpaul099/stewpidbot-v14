@@ -1,5 +1,5 @@
 const { Events, PermissionFlagsBits } = require("discord.js");
-const { BOT_OWNER_ID, ANNOUNCEMENT_CH, prefix } = require("../config.json");
+const { BOT_OWNER_ID, prefix } = require("../config.json");
 
 module.exports = {
 	name: Events.MessageCreate,
@@ -22,9 +22,9 @@ module.exports = {
 					});
 				}
 			} else if (message.content.startsWith(`${prefix}announce`)) {
-				if (message.member.permissionsIn(ANNOUNCEMENT_CH).has(PermissionFlagsBits.SendMessages)) {
+				const AC = await message.guild.channels.cache.find(channel => channel.name === "news-and-updates");
+				if (message.member.permissionsIn(AC).has(PermissionFlagsBits.SendMessages)) {
 					message.delete();
-					const AC = message.client.channels.cache.get(ANNOUNCEMENT_CH);
 					let sentence = message.content.split(" ");
 					sentence.shift();
 					sentence = sentence.join(" ");

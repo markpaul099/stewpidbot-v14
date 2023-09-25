@@ -24,7 +24,6 @@ module.exports = {
 
 		// We map the outputs.
 		const lb = leaderboard.map(e => {
-			console.log(e);
 			if (!e.nickname && e.discriminator == "0") {
 				return `${e.position}. **${e.username}**\nLevel: ${e.level}\nXP: ${e.xp.toLocaleString()}`;
 			} else if (!e.nickname && e.discriminator !== "0") {

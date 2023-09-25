@@ -1,5 +1,5 @@
 const { SlashCommandBuilder, EmbedBuilder } = require("discord.js");
-const { QueryType, useMasterPlayer } = require("discord-player");
+const { QueryType, useMainPlayer } = require("discord-player");
 
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -35,11 +35,17 @@ module.exports = {
 	async execute(interaction) {
 		await interaction.deferReply();
 
-		const channel = interaction.member.voice.channel;
 		// Make sure the user is inside a voice channel
-		if (!interaction.member.voice.channel) return interaction.editReply("You need to be in a Voice Channel to play a song.");
+		const channel = interaction.member.voice.channel;
+		// If the member is not in a voice channel, return
+		if (!channel) {
+			return interaction.editReply({
+				content: "You are not connected to a voice channel.",
+				ephemeral: true,
+			});
+		}
 
-		const player = useMasterPlayer();
+		const player = useMainPlayer();
 		// Create a play queue for the server
 		// const queue = await player.createQueue(interaction.guild);
 		const queue = player.nodes.create(interaction.guild, {
@@ -55,12 +61,6 @@ module.exports = {
 			await queue.connect(interaction.member.voice.channel);
 		}
 
-		// Check if member is in a different voice channel
-		if (!channel) {
-			return interaction.editReply("You are not connected to a voice channel.");
-		} else if (channel !== queue.channel) {
-			return interaction.editReply("You are in a different channel");
-		}
 
 		const embed = new EmbedBuilder();
 
