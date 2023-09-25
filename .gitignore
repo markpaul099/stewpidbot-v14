@@ -20,6 +20,9 @@ index-old.js
 example-command.js
 react-config.js
 commands/admin/test.js
+events/cron.js.disabled
+.dockerignore
+Dockerfile
 
 # Runtime data
 pids

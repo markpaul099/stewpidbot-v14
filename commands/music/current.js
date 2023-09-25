@@ -1,5 +1,5 @@
 const { SlashCommandBuilder, EmbedBuilder } = require("discord.js");
-const { useMasterPlayer } = require("discord-player");
+const { useMainPlayer } = require("discord-player");
 
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -8,7 +8,7 @@ module.exports = {
 	async execute(interaction) {
 		await interaction.deferReply();
 		try {
-			const player = useMasterPlayer();
+			const player = useMainPlayer();
 			const queue = player.nodes.get(interaction.guildId);
 			const embed = new EmbedBuilder();
 

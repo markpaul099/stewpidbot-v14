@@ -1,5 +1,5 @@
 const { SlashCommandBuilder } = require("@discordjs/builders");
-const { useMasterPlayer } = require("discord-player");
+const { useMainPlayer } = require("discord-player");
 
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -9,7 +9,7 @@ module.exports = {
 		await interaction.deferReply();
 		try {
 
-			const player = useMasterPlayer();
+			const player = useMainPlayer();
 
 			// Get the queue for the server
 			const queue = player.nodes.get(interaction.guildId);
@@ -24,9 +24,10 @@ module.exports = {
 
 			// If the member is not in a voice channel, return
 			if (!channel) {
-				return interaction.editReply("You are not connected to a voice channel.");
-			} else if (channel !== queue.channel) {
-				return interaction.editReply("You are in a different channel");
+				return interaction.editReply({
+					content: "You are not connected to a voice channel.",
+					ephemeral: true,
+				});
 			}
 
 

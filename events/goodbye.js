@@ -1,17 +1,16 @@
 const { Events, EmbedBuilder } = require("discord.js");
-const { GUILD_ID, LOGS_CH } = require("../config.json");
 
 module.exports = {
 	name: Events.GuildMemberRemove,
 	once: false,
-	execute(member) {
-		if (member.client.guilds.cache.get(GUILD_ID)) {
+	async execute(member) {
+		if (member.client.guilds.cache.get(member.guild.id)) {
 
 			// Ignore Bot
 			if (member.user.bot) return;
 
 			// LOGS' Channel
-			const logsChannel = member.guild.channels.cache.get(LOGS_CH);
+			const logsChannel = await member.guild.channels.cache.find(channel => channel.name === "logs");
 
 			// Create Embed
 			const embed = new EmbedBuilder()

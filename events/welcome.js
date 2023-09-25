@@ -1,4 +1,3 @@
-const { WELCOME_CH, ROLE_ID, GUILD_ID, INV_LINK } = require("../config.json");
 const { AttachmentBuilder, Events } = require("discord.js");
 const Canvas = require("canvas");
 
@@ -6,18 +5,20 @@ module.exports = {
 	name: Events.GuildMemberAdd,
 	once: false,
 	async execute(member) {
-		if (member.client.guilds.cache.get(GUILD_ID)) {
+		if (member.client.guilds.cache.get(member.guild.id)) {
 			// Ignore Bot
 			if (member.user.bot) return;
 			// Ignore test account
 			if (member.user.id == "645470684419719170") return;
 
 			// Auto Add Role
-			const role = member.guild.roles.cache.get(ROLE_ID);
+			const role = member.guild.roles.cache.find(role => role.name === "member");
 			member.roles.add(role);
 
 			// Welcome Message (Image)
-			const welcomeChannel = member.guild.channels.cache.get(WELCOME_CH);
+			const welcomeChannel = await member.guild.channels.cache.find(channel => channel.name === "welcome");
+
+			const invite = await welcomeChannel.createInvite();
 
 			const memberCount = member.guild.members.cache.filter(member => !member.user.bot).size;
 
@@ -62,7 +63,7 @@ module.exports = {
 			context.drawImage(avatar, 25, 25, 200, 200);
 
 			const attachment = new AttachmentBuilder(canvas.toBuffer("image/png"), { name: `welcome-${member.displayName}.png` });
-			welcomeChannel.send({ content: `Hey <@${member.user.id}> Welcome to **${member.guild.name}** :two_hearts:!!!\nInvite Link: ${INV_LINK}\nPlease change your Discord nickname to your in-game name :)`, files: [attachment] });
+			welcomeChannel.send({ content: `Hey <@${member.user.id}> Welcome to **${member.guild.name}** :two_hearts:!!!\nInvite Link: ${invite}\nPlease change your Discord nickname to your in-game name :)`, files: [attachment] });
 		}
 	},
 };

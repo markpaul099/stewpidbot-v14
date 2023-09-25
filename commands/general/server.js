@@ -1,6 +1,5 @@
 const { SlashCommandBuilder } = require("discord.js");
 const moment = require("moment");
-const { GUILD_ID, SERVER_OWNER_ID, SERVER_OWNER_NAME } = require("../../config.json");
 
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -8,7 +7,8 @@ module.exports = {
 		.setDescription("Provides information about the server"),
 	async execute(interaction) {
 
-		const guild = interaction.client.guilds.cache.get(GUILD_ID);
+		const guild = await interaction.client.guilds.cache.get(interaction.guild.id);
+		const SERVER_OWNER_NAME = await interaction.guild.fetchOwner();
 		const guildmessageServerInfo = interaction.guild;
 		const createdAtServerInfo = moment(interaction.guild.createdAt).format("MMMM Do YYYY, h:mm:ss a");
 		const channelsServerInfo = interaction.guild.channels.cache.size;
@@ -29,7 +29,7 @@ module.exports = {
 			},
 			{
 				name: "Members:",
-				value: `**Member Count:** ${memberCountServerInfo}\n**Bot Count:** ${botCountServerInfo}\n**Owner:** ${SERVER_OWNER_NAME}\n**Owner ID:** ${SERVER_OWNER_ID}`,
+				value: `**Member Count:** ${memberCountServerInfo}\n**Bot Count:** ${botCountServerInfo}\n**Owner:** ${SERVER_OWNER_NAME}\n**Owner ID:** ${interaction.guild.ownerId}`,
 			},
 			{
 				name: "More:",

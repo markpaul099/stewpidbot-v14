@@ -1,5 +1,4 @@
 const { Events } = require("discord.js");
-const { REQUEST_CH } = require("../config.json");
 
 module.exports = {
 	name: Events.MessageCreate,
@@ -7,6 +6,7 @@ module.exports = {
 	once: false,
 
 	async execute(message) {
+		const REQUEST_CH = await message.guild.channels.cache.find(channel => channel.name === "request");
 		if (message.channel.id != REQUEST_CH || message.author.bot) return;
 
 		setTimeout(() => message.delete(), 60000);

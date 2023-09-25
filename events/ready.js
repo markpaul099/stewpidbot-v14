@@ -1,5 +1,5 @@
 const { Events, ActivityType, EmbedBuilder } = require("discord.js");
-const { GUILD_ID, MONGO_URL } = require("../config.json");
+const { MONGO_URL } = require("../config.json");
 const Levels = require("@markpaul099/discord-xp");
 const { Player } = require("discord-player");
 
@@ -21,11 +21,11 @@ ${client.channels.cache.size} channels and ${client.users.cache.size} users cach
 ------------------------------------------------------
 `);
 		// Set Bot's Pressence/Activity
-		const guild = client.guilds.cache.get(GUILD_ID);
 		setInterval(() => {
 			const list = [
 				{ type: ActivityType.Watching, name: "for /help" },
-				{ type: ActivityType.Watching, name: `Members: ${guild.members.cache.filter(member => !member.user.bot).size}` },
+				{ type: ActivityType.Watching, name: `Servers: ${client.guilds.cache.size}` },
+				{ type: ActivityType.Watching, name: `Users: ${client.guilds.cache.reduce((acc, guild) => acc + guild.memberCount, 0)}` },
 			];
 			const index = Math.floor(Math.random() * list.length);
 			client.user.setPresence({ activities: [{ name: list[index].name, type: list[index].type }], status: "online" });
@@ -33,6 +33,7 @@ ${client.channels.cache.size} channels and ${client.users.cache.size} users cach
 
 		// Set Mongo URL
 		Levels.setURL(MONGO_URL);
+
 
 		// Set Player
 		const player = new Player(client, {

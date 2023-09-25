@@ -1,22 +1,19 @@
-const { useMasterPlayer } = require("discord-player");
+const { useMainPlayer } = require("discord-player");
 const { SlashCommandBuilder } = require("discord.js");
 
 module.exports = {
 	data: new SlashCommandBuilder()
-		.setName("exit")
+		.setName("leave")
 		.setDescription("Kick the bot from the channel"),
 	async execute(interaction) {
 		await interaction.deferReply();
 		try {
 
-			const player = useMasterPlayer();
+			const player = useMainPlayer();
 			// Get the current queue
 			const queue = player.nodes.get(interaction.guildId);
 
-			if (!queue) {
-				await interaction.editReply("There are no songs in the queue.");
-				return;
-			}
+			if (!queue) return interaction.editReply("There are no songs in the queue.");
 
 			// Deletes all the songs from the queue and exits the channel
 			queue.delete();
