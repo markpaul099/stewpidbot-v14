@@ -39,6 +39,18 @@ module.exports = {
 		const channel = interaction.member.voice.channel;
 		// If the member is not in a voice channel, return
 		if (!channel) {
+
+			const cmd_ch = await interaction.guild.channels.cache.find(channel => channel.name === "bot-commands");
+			if (cmd_ch.id !== interaction.channel.id) {
+				interaction.editReply(
+					`use ${cmd_ch} for music commands`,
+				);
+				setTimeout(() => {
+					interaction.deleteReply();
+				}, 5000);
+				return;
+			}
+
 			return interaction.editReply({
 				content: "You are not connected to a voice channel.",
 				ephemeral: true,

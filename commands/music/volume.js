@@ -14,6 +14,18 @@ module.exports = {
 				.setRequired(true)),
 	async execute(interaction) {
 		try {
+
+			const cmd_ch = await interaction.guild.channels.cache.find(channel => channel.name === "bot-commands");
+			if (cmd_ch.id !== interaction.channel.id) {
+				interaction.editReply(
+					`use ${cmd_ch} for music commands`,
+				);
+				setTimeout(() => {
+					interaction.deleteReply();
+				}, 5000);
+				return;
+			}
+
 			const volume = interaction.options.getInteger("value");
 			// Let the Discord Client know the bot is alive
 			await interaction.deferReply();

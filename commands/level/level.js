@@ -12,6 +12,18 @@ module.exports = {
 				.setName("member")
 				.setDescription("Choose a Member")),
 	async execute(interaction) {
+
+		const cmd_ch = await interaction.guild.channels.cache.find(channel => channel.name === "bot-commands");
+		if (cmd_ch.id !== interaction.channel.id) {
+			interaction.editReply(
+				`use ${cmd_ch} for level commands`,
+			);
+			setTimeout(() => {
+				interaction.deleteReply();
+			}, 5000);
+			return;
+		}
+
 		await interaction.deferReply();
 		await wait(2000);
 		// Grab the target user.

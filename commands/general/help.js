@@ -5,6 +5,18 @@ module.exports = {
 		.setName("help")
 		.setDescription("Available Commands"),
 	async execute(interaction) {
+
+		const cmd_ch = await interaction.guild.channels.cache.find(channel => channel.name === "bot-commands");
+		if (cmd_ch.id !== interaction.channel.id) {
+			interaction.reply(
+				`use ${cmd_ch} for help command`,
+			);
+			setTimeout(() => {
+				interaction.deleteReply();
+			}, 5000);
+			return;
+		}
+
 		const COMMAND_CH = await interaction.guild.channels.cache.find(channel => channel.name === "bot-commands");
 		const embed = new EmbedBuilder()
 			.setColor("#2B65EC")

@@ -6,6 +6,18 @@ module.exports = {
 		.setName("pokemon")
 		.setDescription("Guess the Pokemon"),
 	async execute(interaction) {
+
+		const cmd_ch = await interaction.guild.channels.cache.find(channel => channel.name === "bot-commands");
+		if (cmd_ch.id !== interaction.channel.id) {
+			interaction.reply(
+				`use ${cmd_ch} for game commands`,
+			);
+			setTimeout(() => {
+				interaction.deleteReply();
+			}, 5000);
+			return;
+		}
+
 		const Game = new GuessThePokemon({
 			message: interaction,
 			isSlashGame: true,
