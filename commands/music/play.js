@@ -172,6 +172,7 @@ module.exports = {
 				return interaction.followUp(e);
 			}
 		}
+		console.log(embed);
 		if (queue.size < 1) {
 			return interaction.editReply("Queue created");
 		}
