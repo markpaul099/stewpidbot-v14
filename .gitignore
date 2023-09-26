@@ -11,7 +11,6 @@ report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
 
 # Custom
 config.json
-package-lock.json
 z-run-stewpidbot.sh
 .nvmrc
 events-old
