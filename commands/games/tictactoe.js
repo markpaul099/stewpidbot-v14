@@ -11,10 +11,30 @@ module.exports = {
 				.setDescription("Choose an Opponent")
 				.setRequired(true)),
 	async execute(interaction) {
+
+		const cmd_ch = await interaction.guild.channels.cache.find(channel => channel.name === "bot-commands");
+		if (cmd_ch.id !== interaction.channel.id) {
+			interaction.reply(
+				`use ${cmd_ch} for game commands`,
+			);
+			setTimeout(() => {
+				interaction.deleteReply();
+			}, 5000);
+			return;
+		}
+
+		const opponent = interaction.options.getUser("opponent");
+		if (opponent.bot) {
+			interaction.reply({
+				content: "Bot is not allowed",
+			});
+			return;
+		}
+
 		const Game = new TicTacToe({
 			message: interaction,
 			isSlashGame: true,
-			opponent: interaction.options.getUser("opponent"),
+			opponent: opponent,
 			embed: {
 				title: "Tic Tac Toe",
 				color: "#2F3136",

@@ -7,6 +7,18 @@ module.exports = {
 		.setName("leaderboard")
 		.setDescription("Guild's Leaderboard"),
 	async execute(interaction) {
+
+		const cmd_ch = await interaction.guild.channels.cache.find(channel => channel.name === "bot-commands");
+		if (cmd_ch.id !== interaction.channel.id) {
+			interaction.editReply(
+				`use ${cmd_ch} for level commands`,
+			);
+			setTimeout(() => {
+				interaction.deleteReply();
+			}, 5000);
+			return;
+		}
+
 		await interaction.deferReply();
 		await wait(2000);
 		// We grab top 10 users with most xp in the current server.

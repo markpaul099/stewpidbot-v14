@@ -9,6 +9,18 @@ module.exports = {
 		await interaction.deferReply();
 		try {
 
+			const cmd_ch = await interaction.guild.channels.cache.find(channel => channel.name === "bot-commands");
+			if (cmd_ch.id !== interaction.channel.id) {
+				interaction.editReply(
+					`use ${cmd_ch} for music commands`,
+				);
+				setTimeout(() => {
+					interaction.deleteReply();
+				}, 5000);
+				return;
+			}
+
+
 			const player = useMainPlayer();
 			// Get the current queue
 			const queue = player.nodes.get(interaction.guildId);
