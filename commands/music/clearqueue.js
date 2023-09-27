@@ -6,51 +6,57 @@ module.exports = {
 		.setName("clearqueue")
 		.setDescription("Clear all the music in the queue"),
 	async execute(interaction) {
-		await interaction.deferReply();
 		try {
 
 			const cmd_ch = await interaction.guild.channels.cache.find(channel => channel.name === "bot-commands");
 			if (cmd_ch.id !== interaction.channel.id) {
-				interaction.editReply(
-					`use ${cmd_ch} for music commands`,
-				);
-				setTimeout(() => {
-					interaction.deleteReply();
-				}, 5000);
+				await interaction.reply({
+					content: `use ${cmd_ch} for music commands`,
+					ephemeral: true,
+				});
 				return;
 			}
 
-			const channel = interaction.member.voice.channel;
-
-
 			const queue = useQueue(interaction.guild.id);
 
-			if (!queue || !queue.node.isPlaying()) {
-				return interaction.editReply(
-					"There is no music currently playing.");
+			// Return if queue is empty
+			if (!queue) {
+				await interaction.reply({
+					content: "There are no songs in the queue.",
+					ephemeral: true,
+				});
+				return;
 			}
 
 			if (queue.size < 1) {
-				return interaction.editReply(
-					"There is no music in the queue after the current one.",
-				);
+				await interaction.reply({
+					content: "There is no music in the queue after the current one.",
+					ephemeral: true,
+				});
+				return;
 			}
 
-			if (!channel) {
-				return interaction.editReply(
-					"You are not connected to a voice channel.",
-				);
+			const usr_channel = interaction.member.voice.channel;
+			const cli_channel = interaction.guild.members.me.voice.channel;
+
+			// Check if user is in the same voice channel as the bot
+			if (cli_channel !== usr_channel) {
+				await interaction.reply({
+					content: `You are not connected in ${cli_channel}`,
+					ephemeral: true,
+				});
+				return;
 			}
 
 			queue.clear();
 
-			await interaction.editReply(
-				"The queue has just been cleared.",
-			);
+			await interaction.reply("The queue has just been cleared.");
+
 		} catch (error) {
 			console.error(error);
-			await interaction.editReply({
+			await interaction.reply({
 				content: "There was an error while executing this command.",
+				ephemeral: true,
 			});
 		}
 	},
