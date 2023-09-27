@@ -11,7 +11,7 @@
         "url": "https://github.com/markpaul099/stewpidbot-v14.git"
     },
     "dependencies": {
-        "@discord-player/extractor": "^4.2.1",
+        "@discord-player/extractor": "^4.4.4",
         "@discordjs/voice": "^0.16.0",
         "@markpaul099/discord-xp": "1.1.24",
         "add": "^2.0.6",

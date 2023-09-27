@@ -2,6 +2,7 @@ const { Events, ActivityType, EmbedBuilder } = require("discord.js");
 const { MONGO_URL } = require("../config.json");
 const Levels = require("@markpaul099/discord-xp");
 const { Player } = require("discord-player");
+const { YouTubeExtractor } = require("@discord-player/extractor");
 
 module.exports = {
 	name: Events.ClientReady,
@@ -45,6 +46,7 @@ ${client.channels.cache.size} channels and ${client.users.cache.size} users cach
 		});
 
 		await player.extractors.loadDefault();
+		await player.extractors.register(YouTubeExtractor);
 
 		player.events.on("playerStart", (queue, track) => {
 			const embed = new EmbedBuilder()

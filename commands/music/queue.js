@@ -7,28 +7,39 @@ module.exports = {
 		.setName("queue")
 		.setDescription("shows first 10 songs in the queue"),
 	async execute(interaction) {
-		await interaction.deferReply();
 		try {
 
 			const cmd_ch = await interaction.guild.channels.cache.find(channel => channel.name === "bot-commands");
 			if (cmd_ch.id !== interaction.channel.id) {
-				interaction.editReply(
-					`use ${cmd_ch} for music commands`,
-				);
-				setTimeout(() => {
-					interaction.deleteReply();
-				}, 5000);
+				await interaction.reply({
+					content: `use ${cmd_ch} for music commands`,
+					ephemeral: true,
+				});
 				return;
 			}
-
 
 			const player = useMainPlayer();
 			// Get the queue for the server
 			const queue = player.nodes.get(interaction.guildId);
 
-			// check if there are songs in the queue
+			// Check if the queue is empty
 			if (!queue) {
-				await interaction.editReply("There are no songs in the queue.");
+				await interaction.reply({
+					content: "There are no songs in the queue.",
+					ephemeral: true,
+				});
+				return;
+			}
+
+			const usr_channel = interaction.member.voice.channel;
+			const cli_channel = interaction.guild.members.me.voice.channel;
+
+			// Check if user is in the same voice channel as the bot
+			if (cli_channel !== usr_channel) {
+				await interaction.reply({
+					content: `You are not connected in ${cli_channel}`,
+					ephemeral: true,
+				});
 				return;
 			}
 
@@ -40,7 +51,7 @@ module.exports = {
 			// Get the current song
 			const currentSong = queue.currentTrack;
 
-			await interaction.editReply({
+			await interaction.reply({
 				embeds: [
 					new EmbedBuilder()
 						.setColor("#152739")
@@ -53,7 +64,10 @@ module.exports = {
 			});
 		} catch (error) {
 			console.error(error);
-			await interaction.editReply({ content: "There was an error while executing this command." });
+			await interaction.reply({
+				content: "There was an error while executing this command.",
+				ephemeral: true,
+			});
 		}
 	},
 };
