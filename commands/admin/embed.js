@@ -24,12 +24,12 @@ module.exports = {
 				.setDescription("Embed color (hex)"))
 		.setDefaultMemberPermissions(PermissionFlagsBits.Administrator),
 	async execute(interaction) {
-		const Channel = interaction.options.getChannel("channel");
+		const channelName = interaction.options.getChannel("channel");
 		const content = interaction.options.getString("content");
 		const color = interaction.options.getString("color");
 		const title = interaction.options.getString("title");
 
-		const channel = await interaction.guild.channels.cache.get(Channel.id);
+		const channel = await interaction.guild.channels.cache.get(channelName.id);
 		const embed = new EmbedBuilder()
 			.setTitle(title)
 			.setColor(color)

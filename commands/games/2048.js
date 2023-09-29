@@ -7,10 +7,10 @@ module.exports = {
 		.setDescription("Slide the Tiles"),
 	async execute(interaction) {
 
-		const cmd_ch = await interaction.guild.channels.cache.find(channel => channel.name === "bot-commands");
-		if (cmd_ch.id !== interaction.channel.id) {
+		const cmdChannel = await interaction.guild.channels.cache.find(channel => channel.name === "bot-commands");
+		if (cmdChannel.id !== interaction.channel.id) {
 			interaction.reply(
-				`use ${cmd_ch} for game commands`,
+				`use ${cmdChannel} for game commands`,
 			);
 			setTimeout(() => {
 				interaction.deleteReply();

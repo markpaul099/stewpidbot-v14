@@ -8,10 +8,10 @@ module.exports = {
 	async execute(interaction) {
 		try {
 
-			const cmd_ch = await interaction.guild.channels.cache.find(channel => channel.name === "bot-commands");
-			if (cmd_ch.id !== interaction.channel.id) {
+			const cmdChannel = await interaction.guild.channels.cache.find(channel => channel.name === "bot-commands");
+			if (cmdChannel.id !== interaction.channel.id) {
 				await interaction.reply({
-					content: `use ${cmd_ch} for music commands`,
+					content: `use ${cmdChannel} for music commands`,
 					ephemeral: true,
 				});
 				return;
@@ -30,13 +30,13 @@ module.exports = {
 				return;
 			}
 
-			const usr_channel = interaction.member.voice.channel;
-			const cli_channel = interaction.guild.members.me.voice.channel;
+			const usrChannel = interaction.member.voice.channel;
+			const cliChannel = interaction.guild.members.me.voice.channel;
 
 			// Check if user is in the same voice channel as the bot
-			if (cli_channel !== usr_channel) {
+			if (cliChannel !== usrChannel) {
 				await interaction.reply({
-					content: `You are not connected in ${cli_channel}`,
+					content: `You are not connected in ${cliChannel}`,
 					ephemeral: true,
 				});
 				return;

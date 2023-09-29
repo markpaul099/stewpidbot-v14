@@ -6,18 +6,16 @@ module.exports = {
 		.setDescription("Available Commands"),
 	async execute(interaction) {
 
-		const cmd_ch = await interaction.guild.channels.cache.find(channel => channel.name === "bot-commands");
-		if (cmd_ch.id !== interaction.channel.id) {
+		const cmdChannel = await interaction.guild.channels.cache.find(channel => channel.name === "bot-commands");
+		if (cmdChannel.id !== interaction.channel.id) {
 			interaction.reply(
-				`use ${cmd_ch} for help command`,
+				`use ${cmdChannel} for help command`,
 			);
 			setTimeout(() => {
 				interaction.deleteReply();
 			}, 5000);
 			return;
 		}
-
-		const COMMAND_CH = await interaction.guild.channels.cache.find(channel => channel.name === "bot-commands");
 		const embed = new EmbedBuilder()
 			.setColor("#2B65EC")
 			.setTitle("Commands")
@@ -29,7 +27,7 @@ module.exports = {
 **/server** - See server stats
 **/uptime** - Bot's uptime\n
 ` },
-			{ name: "Games", value: `Only work in ${COMMAND_CH}
+			{ name: "Games", value: `Only work in ${cmdChannel}
 **/2048** - Slide the Tiles
 **/connect** - Connect 4 Dots
 **/findfruit** - Find Fruit
@@ -41,11 +39,11 @@ module.exports = {
 **/ttt** - Tic Tac Toe!
 **/trivia** - Guess the Answer\n
 ` },
-			{ name: "Levels", value: `Only work in ${COMMAND_CH}
+			{ name: "Levels", value: `Only work in ${cmdChannel}
 **/leaderboard** - Guild Ranking
 **/level** - Check User Level\n
 ` },
-			{ name: "Music", value: `Only work in ${COMMAND_CH}
+			{ name: "Music", value: `Only work in ${cmdChannel}
 **/clearqueue** - Clear all the music in the queue
 **/current** - Shows the song currently playing
 **/leave** - Kick the bot from the voice channel

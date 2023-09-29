@@ -13,10 +13,10 @@ module.exports = {
 				.setDescription("Choose a Member")),
 	async execute(interaction) {
 
-		const cmd_ch = await interaction.guild.channels.cache.find(channel => channel.name === "bot-commands");
-		if (cmd_ch.id !== interaction.channel.id) {
+		const cmdChannel = await interaction.guild.channels.cache.find(channel => channel.name === "bot-commands");
+		if (cmdChannel.id !== interaction.channel.id) {
 			interaction.editReply(
-				`use ${cmd_ch} for level commands`,
+				`use ${cmdChannel} for level commands`,
 			);
 			setTimeout(() => {
 				interaction.deleteReply();
