@@ -18,7 +18,7 @@ module.exports = {
 			// Welcome Message (Image)
 			const welcomeChannel = await member.guild.channels.cache.find(channel => channel.name === "welcome");
 
-			const invite = await welcomeChannel.createInvite();
+			const invite = await welcomeChannel.createInvite({ maxAge: 2592000 });
 
 			const memberCount = member.guild.members.cache.filter(member => !member.user.bot).size;
 
