@@ -11,13 +11,13 @@ module.exports = {
 				.setRequired(true))
 		.setDefaultMemberPermissions(PermissionFlagsBits.Administrator),
 	async execute(interaction) {
-		const userid = interaction.options.getString("userid");
+		const userId = interaction.options.getString("userid");
 
 		try {
-			await interaction.guild.members.unban(userid);
+			await interaction.guild.members.unban(userId);
 
 			const embed = new EmbedBuilder()
-				.setDescription(`Succesfully unban id: ${userid} from the server.`)
+				.setDescription(`Succesfully unban id: ${userId} from the server.`)
 				.setColor("#2B65EC")
 				.setTimestamp();
 

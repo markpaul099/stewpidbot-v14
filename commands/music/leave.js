@@ -8,10 +8,10 @@ module.exports = {
 	async execute(interaction) {
 		try {
 
-			const cmd_ch = await interaction.guild.channels.cache.find(channel => channel.name === "bot-commands");
-			if (cmd_ch.id !== interaction.channel.id) {
+			const cmdChannel = await interaction.guild.channels.cache.find(channel => channel.name === "bot-commands");
+			if (cmdChannel.id !== interaction.channel.id) {
 				await interaction.reply({
-					content: `use ${cmd_ch} for music commands`,
+					content: `use ${cmdChannel} for music commands`,
 					ephemeral: true,
 				});
 				return;

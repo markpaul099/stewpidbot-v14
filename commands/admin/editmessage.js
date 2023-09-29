@@ -22,12 +22,12 @@ module.exports = {
 				.setRequired(true))
 		.setDefaultMemberPermissions(PermissionFlagsBits.Administrator),
 	async execute(interaction) {
-		const ChannelID = interaction.options.getChannel("channel");
-		const messageID = interaction.options.getString("message");
+		const channelName = interaction.options.getChannel("channel");
+		const msgId = interaction.options.getString("message");
 		const description = interaction.options.getString("content").replace(/\\n/g, "\r\n");
 
-		const channel = await interaction.guild.channels.fetch(ChannelID.id);
-		const message = await channel.messages.fetch(messageID);
+		const channel = await interaction.guild.channels.cache.get(channelName.id);
+		const message = await channel.messages.fetch(msgId);
 
 		message.edit(description);
 		await interaction.reply("Edited the message.");

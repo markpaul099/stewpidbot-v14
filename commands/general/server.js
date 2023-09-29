@@ -8,14 +8,14 @@ module.exports = {
 	async execute(interaction) {
 
 		const guild = await interaction.client.guilds.cache.get(interaction.guild.id);
-		const SERVER_OWNER_NAME = await interaction.guild.fetchOwner();
+		const serverOwnerName = await interaction.guild.fetchOwner();
 		const guildmessageServerInfo = interaction.guild;
 		const createdAtServerInfo = moment(interaction.guild.createdAt).format("MMMM Do YYYY, h:mm:ss a");
 		const channelsServerInfo = interaction.guild.channels.cache.size;
 		const memberCountServerInfo = guild.members.cache.filter(member => !member.user.bot).size;
 		const botCountServerInfo = guild.members.cache.filter(member => member.user.bot).size;
 		const largeServerInfo = interaction.guild.large;
-		const afkServerInfo = interaction.guild.channels.cache.get(interaction.guild.afkChannelID) === undefined ? "None" : interaction.guild.channels.cache.get(guildmessageServerInfo.afkChannelID).name;
+		const afkServerInfo = interaction.guild.channels.cache.get(interaction.guild.afkChannelId) === undefined ? "None" : interaction.guild.channels.cache.get(guildmessageServerInfo.afkChannelId).name;
 
 		const embed = {
 			author: {
@@ -29,7 +29,7 @@ module.exports = {
 			},
 			{
 				name: "Members:",
-				value: `**Member Count:** ${memberCountServerInfo}\n**Bot Count:** ${botCountServerInfo}\n**Owner:** ${SERVER_OWNER_NAME}\n**Owner ID:** ${interaction.guild.ownerId}`,
+				value: `**Member Count:** ${memberCountServerInfo}\n**Bot Count:** ${botCountServerInfo}\n**Owner:** ${serverOwnerName}\n**Owner ID:** ${interaction.guild.ownerId}`,
 			},
 			{
 				name: "More:",
