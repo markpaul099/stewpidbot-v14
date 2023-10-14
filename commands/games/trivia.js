@@ -1,5 +1,6 @@
 const { SlashCommandBuilder } = require("discord.js");
 const { Trivia } = require("discord-gamecord");
+require("dotenv").config();
 
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -16,7 +17,7 @@ module.exports = {
 				)),
 	async execute(interaction) {
 
-		const cmdChannel = await interaction.guild.channels.cache.find(channel => channel.name === "bot-commands");
+		const cmdChannel = await interaction.guild.channels.cache.find(channel => channel.name === process.env.commandChannel);
 		if (cmdChannel.id !== interaction.channel.id) {
 			interaction.reply(
 				`use ${cmdChannel} for game commands`,

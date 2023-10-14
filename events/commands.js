@@ -1,5 +1,5 @@
 const { Events, PermissionFlagsBits } = require("discord.js");
-const { BOT_OWNER_ID, prefix } = require("../config.json");
+require("dotenv").config();
 
 module.exports = {
 	name: Events.MessageCreate,
@@ -8,8 +8,8 @@ module.exports = {
 
 	async execute(message) {
 		{
-			if (message.content.startsWith(`${prefix}say`)) {
-				if (message.author.id == BOT_OWNER_ID) {
+			if (message.content.startsWith(`${process.env.prefix}say`)) {
+				if (message.author.id == process.env.botOwnerId) {
 					message.delete();
 					let sentence = message.content.split(" ");
 					sentence.shift();
@@ -21,8 +21,8 @@ module.exports = {
 						setTimeout(() => message.delete(), 10000);
 					});
 				}
-			} else if (message.content.startsWith(`${prefix}announce`)) {
-				const AC = await message.guild.channels.cache.find(channel => channel.name === "news-and-updates");
+			} else if (message.content.startsWith(`${process.env.prefix}announce`)) {
+				const AC = await message.guild.channels.cache.find(channel => channel.name === process.env.newsChannel);
 				if (message.member.permissionsIn(AC).has(PermissionFlagsBits.SendMessages)) {
 					message.delete();
 					let sentence = message.content.split(" ");

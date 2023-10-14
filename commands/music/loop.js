@@ -1,5 +1,6 @@
 const { SlashCommandBuilder } = require("discord.js");
 const { useQueue, QueueRepeatMode } = require("discord-player");
+require("dotenv").config();
 
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -18,7 +19,7 @@ module.exports = {
 	async execute(interaction) {
 		try {
 
-			const cmdChannel = await interaction.guild.channels.cache.find(channel => channel.name === "bot-commands");
+			const cmdChannel = await interaction.guild.channels.cache.find(channel => channel.name === process.env.commandChannel);
 			if (cmdChannel.id !== interaction.channel.id) {
 				await interaction.reply({
 					content: `use ${cmdChannel} for music commands`,

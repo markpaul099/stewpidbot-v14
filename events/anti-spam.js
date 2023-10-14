@@ -1,5 +1,7 @@
 const { Events, PermissionFlagsBits } = require("discord.js");
 const AntiSpam = require("discord-anti-spam");
+require("dotenv").config();
+
 const antiSpam = new AntiSpam({
 	warnThreshold: 3, // Amount of messages sent in a row that will cause a warning.
 	muteTreshold: 4, // Amount of messages sent in a row that will cause a mute.
@@ -11,7 +13,7 @@ const antiSpam = new AntiSpam({
 	maxDuplicatesMute: 10, // Amount of duplicate messages that trigger a mute.
 	maxDuplicatesKick: 12, // Amount of duplicate messages that trigger a kick.
 	maxDuplicatesBan: 8, // Amount of duplicate messages that trigger a ban.
-	modLogsChannel: "logs", // Name or ID of the channel in which moderation logs will be sent.
+	modLogsChannel: process.env.logsChannel, // Name or ID of the channel in which moderation logs will be sent.
 	modLogsEnabled: true, // Whether moderation logs are enabled.
 	modLogsMode: "message", // Whether send moderations logs in an discord embed or normal message! Options: "embed" or "message".
 	ignoreBots: true,

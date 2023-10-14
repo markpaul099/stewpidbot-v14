@@ -1,4 +1,5 @@
 const { Events, EmbedBuilder } = require("discord.js");
+require("dotenv").config();
 
 module.exports = {
 	name: Events.GuildMemberRemove,
@@ -10,7 +11,7 @@ module.exports = {
 			if (member.user.bot) return;
 
 			// LOGS' Channel
-			const logsChannel = await member.guild.channels.cache.find(channel => channel.name === "logs");
+			const logsChannel = await member.guild.channels.cache.find(channel => channel.name === process.env.logsChannel);
 
 			// Create Embed
 			const embed = new EmbedBuilder()

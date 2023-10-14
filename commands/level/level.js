@@ -2,6 +2,7 @@ const { SlashCommandBuilder, AttachmentBuilder } = require("discord.js");
 const wait = require("node:timers/promises").setTimeout;
 const canvacord = require("canvacord");
 const Levels = require("@markpaul099/discord-xp");
+require("dotenv").config();
 
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -13,7 +14,7 @@ module.exports = {
 				.setDescription("Choose a Member")),
 	async execute(interaction) {
 
-		const cmdChannel = await interaction.guild.channels.cache.find(channel => channel.name === "bot-commands");
+		const cmdChannel = await interaction.guild.channels.cache.find(channel => channel.name === process.env.commandChannel);
 		if (cmdChannel.id !== interaction.channel.id) {
 			interaction.editReply(
 				`use ${cmdChannel} for level commands`,
