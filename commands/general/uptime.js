@@ -16,6 +16,6 @@ module.exports = {
 		const botUptime = moment.duration(interaction.client.uptime).format(" D [days], H [hrs], m [mins], s [secs]"); // format bot uptime with moment
 
 		console.log(`${botUptime} - ${interaction.client.uptime} - ${hostUptime} - ${hostMilliseconds}`); // used for debugging on terminal
-		interaction.reply(`Bot Uptime (${interaction.client.user.username}): ${botUptime}\nR-Pi Uptime (Server): ${hostUptime}`); // return uptime
+		interaction.reply(`Bot Uptime (${interaction.client.user}): ${botUptime}\nHost Uptime (Server): ${hostUptime}`); // return uptime
 	},
 };

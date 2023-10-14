@@ -1,7 +1,7 @@
 const { SlashCommandBuilder, EmbedBuilder } = require("discord.js");
 const { useMainPlayer } = require("discord-player");
 const { lyricsExtractor } = require("@discord-player/extractor");
-const { GeniusApiToken } = require("./../../config.json");
+require("dotenv").config();
 
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -10,7 +10,7 @@ module.exports = {
 	async execute(interaction) {
 		try {
 
-			const cmdChannel = await interaction.guild.channels.cache.find(channel => channel.name === "bot-commands");
+			const cmdChannel = await interaction.guild.channels.cache.find(channel => channel.name === process.env.commandChannel);
 			if (cmdChannel.id !== interaction.channel.id) {
 				await interaction.reply({
 					content: `use ${cmdChannel} for music commands`,
@@ -44,7 +44,7 @@ module.exports = {
 
 			const embed = new EmbedBuilder();
 
-			const lyricsClient = lyricsExtractor(GeniusApiToken);
+			const lyricsClient = lyricsExtractor(process.env.geniusApiToken);
 			const result = await lyricsClient.search(queue.currentTrack.title)
 				.then((x) => console.log(x))
 				.catch(console.error);

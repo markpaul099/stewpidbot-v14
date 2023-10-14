@@ -1,5 +1,6 @@
 const { AttachmentBuilder, Events } = require("discord.js");
 const Canvas = require("canvas");
+require("dotenv").config();
 
 module.exports = {
 	name: Events.GuildMemberAdd,
@@ -12,11 +13,11 @@ module.exports = {
 			if (member.user.id == "645470684419719170") return;
 
 			// Auto Add Role
-			const role = member.guild.roles.cache.find(role => role.name === "member");
+			const role = member.guild.roles.cache.find(role => role.name === process.env.newMemberRole);
 			member.roles.add(role);
 
 			// Welcome Message (Image)
-			const welcomeChannel = await member.guild.channels.cache.find(channel => channel.name === "welcome");
+			const welcomeChannel = await member.guild.channels.cache.find(channel => channel.name === process.env.welcomeChannel);
 
 			const invite = await welcomeChannel.createInvite({ maxAge: 2592000 });
 

@@ -1,11 +1,12 @@
 const { Events } = require("discord.js");
 const Levels = require("@markpaul099/discord-xp");
+require("dotenv").config();
 
 module.exports = {
 	name: Events.MessageCreate,
 	once: false,
 	async execute(message) {
-		const channel = await message.guild.channels.cache.find(channel => channel.name === "bot-commands");
+		const channel = await message.guild.channels.cache.find(channel => channel.name === process.env.commandChannel);
 		if (!message.guild) return;
 		if (message.author.bot) return;
 
