@@ -32,7 +32,7 @@ ${client.channels.cache.size} channels and ${client.users.cache.size} users cach
 		}, 10000);
 
 		// Set Mongo URL
-		Levels.setURL(process.env.mongoURL);
+		Levels.setURL(process.env.mongoUrl);
 
 
 		// Set Player
