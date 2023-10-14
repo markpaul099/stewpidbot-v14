@@ -1,4 +1,4 @@
-const { AttachmentBuilder, Events } = require("discord.js");
+const { AttachmentBuilder, Events, Colors } = require("discord.js");
 const Canvas = require("canvas");
 require("dotenv").config();
 
@@ -12,9 +12,15 @@ module.exports = {
 			// Ignore test account
 			if (member.user.id == "645470684419719170") return;
 
-			// Auto Add Role
-			const role = member.guild.roles.cache.find(role => role.name === process.env.newMemberRole);
-			member.roles.add(role);
+			// Check if role exist
+			const checkRole = member.guild.roles.cache.find(role => role.name === process.env.newMemberRole);
+			if (!checkRole) {
+				member.guild.roles.create({
+					name: process.env.newMemberRole,
+					color: Colors.Blue,
+					reason: "Roles for new members",
+				});
+			}
 
 			// Welcome Message (Image)
 			const welcomeChannel = await member.guild.channels.cache.find(channel => channel.name === process.env.welcomeChannel);
@@ -64,7 +70,14 @@ module.exports = {
 			context.drawImage(avatar, 25, 25, 200, 200);
 
 			const attachment = new AttachmentBuilder(canvas.toBuffer("image/png"), { name: `welcome-${member.displayName}.png` });
+
+			// Send Welcome Message
 			welcomeChannel.send({ content: `Hey <@${member.user.id}> Welcome to **${member.guild.name}** :two_hearts:!!!\nInvite Link: ${invite}\nPlease change your Discord nickname to your in-game name :)`, files: [attachment] });
+
+			// Add Role
+			const role = member.guild.roles.cache.find(role => role.name === process.env.newMemberRole);
+			member.roles.add(role);
+
 		}
 	},
 };
