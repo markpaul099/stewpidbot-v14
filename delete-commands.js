@@ -1,10 +1,11 @@
 const { REST, Routes } = require("discord.js");
-require("dotenv").config();
-const { ClientID, token } = require("./config.json");
 
-const rest = new REST({ version: 10 }).setToken(token);
+// Load config
+require("dotenv").config();
+
+const rest = new REST({ version: 10 }).setToken(process.env.token);
 
 // for global commands
-rest.put(Routes.applicationCommands(ClientID), { body: [] })
+rest.put(Routes.applicationCommands(process.env.clientId), { body: [] })
 	.then(() => console.log("Successfully deleted all application commands."))
 	.catch(console.error);
