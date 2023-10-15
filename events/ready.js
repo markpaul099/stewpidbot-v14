@@ -1,7 +1,6 @@
 const { Events, ActivityType, EmbedBuilder } = require("discord.js");
 const Levels = require("@markpaul099/discord-xp");
 const { Player } = require("discord-player");
-require("dotenv").config();
 
 module.exports = {
 	name: Events.ClientReady,
@@ -16,7 +15,7 @@ Working on ${client.guilds.cache.size} servers!
 ${client.channels.cache.size} channels and ${client.users.cache.size} users cached!
 ------------------------------------------------------
 ------------------------------------------------------
------------------Bot by Tomohiro#6331-----------------
+--------------------Bot by markpaul-------------------
 ------------------------------------------------------
 ------------------------------------------------------
 `);
@@ -30,7 +29,6 @@ ${client.channels.cache.size} channels and ${client.users.cache.size} users cach
 			const index = Math.floor(Math.random() * list.length);
 			client.user.setPresence({ activities: [{ name: list[index].name, type: list[index].type }], status: "online" });
 		}, 10000);
-
 		// Set Mongo URL
 		Levels.setURL(process.env.mongoUrl);
 

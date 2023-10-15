@@ -1,6 +1,5 @@
 const { SlashCommandBuilder } = require("@discordjs/builders");
 const { useMainPlayer } = require("discord-player");
-require("dotenv").config();
 
 module.exports = {
 	data: new SlashCommandBuilder()

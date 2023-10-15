@@ -1,5 +1,4 @@
 const { Events } = require("discord.js");
-require("dotenv").config();
 
 module.exports = {
 	name: Events.MessageCreate,

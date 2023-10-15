@@ -1,6 +1,5 @@
 const { SlashCommandBuilder } = require("discord.js");
 const { useQueue } = require("discord-player");
-require("dotenv").config();
 
 module.exports = {
 	data: new SlashCommandBuilder()
