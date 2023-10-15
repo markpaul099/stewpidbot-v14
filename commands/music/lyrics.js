@@ -1,7 +1,6 @@
 const { SlashCommandBuilder, EmbedBuilder } = require("discord.js");
 const { useMainPlayer } = require("discord-player");
 const { lyricsExtractor } = require("@discord-player/extractor");
-require("dotenv").config();
 
 module.exports = {
 	data: new SlashCommandBuilder()

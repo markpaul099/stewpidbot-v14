@@ -1,6 +1,5 @@
 const { SlashCommandBuilder } = require("discord.js");
 const { TwoZeroFourEight } = require("discord-gamecord");
-require("dotenv").config();
 
 module.exports = {
 	data: new SlashCommandBuilder()

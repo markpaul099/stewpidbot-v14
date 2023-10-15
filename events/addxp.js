@@ -1,6 +1,5 @@
 const { Events } = require("discord.js");
 const Levels = require("@markpaul099/discord-xp");
-require("dotenv").config();
 
 module.exports = {
 	name: Events.MessageCreate,

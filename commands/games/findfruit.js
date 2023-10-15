@@ -1,6 +1,5 @@
 const { SlashCommandBuilder } = require("discord.js");
 const { FindEmoji } = require("discord-gamecord");
-require("dotenv").config();
 
 module.exports = {
 	data: new SlashCommandBuilder()

@@ -2,7 +2,6 @@ const { SlashCommandBuilder, AttachmentBuilder } = require("discord.js");
 const wait = require("node:timers/promises").setTimeout;
 const canvacord = require("canvacord");
 const Levels = require("@markpaul099/discord-xp");
-require("dotenv").config();
 
 module.exports = {
 	data: new SlashCommandBuilder()
