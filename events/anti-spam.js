@@ -1,6 +1,5 @@
 const { Events, PermissionFlagsBits } = require("discord.js");
 const AntiSpam = require("discord-anti-spam");
-require("dotenv").config();
 
 const antiSpam = new AntiSpam({
 	warnThreshold: 3, // Amount of messages sent in a row that will cause a warning.
