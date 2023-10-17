@@ -1,6 +1,5 @@
 const { AttachmentBuilder, Events, Colors } = require("discord.js");
 const Canvas = require("canvas");
-require("dotenv").config();
 
 module.exports = {
 	name: Events.GuildMemberAdd,
