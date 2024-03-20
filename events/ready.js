@@ -1,4 +1,4 @@
-const { Events, ActivityType, EmbedBuilder } = require("discord.js");
+const { Events, ActivityType, EmbedBuilder, Routes, DataResolver } = require("discord.js");
 const Levels = require("@markpaul099/discord-xp");
 const { Player } = require("discord-player");
 
@@ -19,6 +19,12 @@ ${client.channels.cache.size} channels and ${client.users.cache.size} users cach
 ------------------------------------------------------
 ------------------------------------------------------
 `);
+
+		// Set Bot's Banner (GIF)
+		await client.rest.patch(Routes.user(), {
+			body: { banner: await DataResolver.resolveImage("https://c.tenor.com/Jc9jT66AJRwAAAAd/tenor.gif") },
+		});
+
 		// Set Bot's Pressence/Activity
 		setInterval(() => {
 			const list = [
@@ -29,6 +35,7 @@ ${client.channels.cache.size} channels and ${client.users.cache.size} users cach
 			const index = Math.floor(Math.random() * list.length);
 			client.user.setPresence({ activities: [{ name: list[index].name, type: list[index].type }], status: "online" });
 		}, 10000);
+
 		// Set Mongo URL
 		Levels.setURL(process.env.mongoUrl);
 
@@ -51,7 +58,6 @@ ${client.channels.cache.size} channels and ${client.users.cache.size} users cach
 				.setTitle("Now Playing")
 				.setDescription(`**[${track.title}](${track.url})**\nRequested by: ${track.requestedBy}\nDuration: ${track.duration}`)
 				.setThumbnail(`${track.thumbnail}`);
-			// we will later define queue.metadata object while creating the queue
 			queue.metadata.channel.send({ embeds: [embed] });
 		});
 
