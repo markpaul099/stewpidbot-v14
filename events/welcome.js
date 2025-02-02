@@ -9,7 +9,7 @@ module.exports = {
 			// Ignore Bot
 			if (member.user.bot) return;
 			// Ignore test account
-			if (member.user.id == "0") return;
+			if (member.user.id == "645470684419719170") return;
 
 			// Check if role exist
 			const checkRole = member.guild.roles.cache.find(role => role.name === process.env.newMemberRole);
@@ -42,7 +42,7 @@ module.exports = {
 			const canvas = Canvas.createCanvas(700, 250);
 			const context = canvas.getContext("2d");
 
-			const background = await Canvas.loadImage("https://i.ibb.co/c69rDyd/welcome-700px-text-overlay.jpg");
+			const background = await Canvas.loadImage("https://i.imgur.com/30P1eSF.jpeg");
 			context.drawImage(background, 0, 0, 700, 250);
 
 			context.strokeStyle = "#74037b";
