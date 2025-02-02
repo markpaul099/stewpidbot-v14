@@ -42,7 +42,7 @@ module.exports = {
 			const canvas = Canvas.createCanvas(700, 250);
 			const context = canvas.getContext("2d");
 
-			const background = await Canvas.loadImage("https://i.imgur.com/30P1eSF.jpeg");
+			const background = await Canvas.loadImage("https://i.ibb.co/wFcZc4SP/image-2025-02-03-012442032.png");
 			context.drawImage(background, 0, 0, 700, 250);
 
 			context.strokeStyle = "#74037b";
