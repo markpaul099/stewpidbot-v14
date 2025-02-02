@@ -43,21 +43,22 @@ module.exports = {
 **/leaderboard** - Guild Ranking
 **/level** - Check User Level\n
 ` },
-			{ name: "Music", value: `Only work in ${cmdChannel}
-**/clearqueue** - Clear all the music in the queue
-**/current** - Shows the song currently playing
-**/leave** - Kick the bot from the voice channel
-**/loop** - Enable or disable looping of songs or the whole queue
-**/lyrics** - Current song lyrics
-**/pause** - Pauses the current song
-**/play** - Play a song from YouTube, Spotify or Soundcloud
-**/previous** - Replays previous song
-**/queue** - Shows first 10 songs in the queue
-**/resume** - Resumes the current song
-**/shuffle** - Shuffles the playlist
-**/skip** - Skips the current song
-**/skipto** - Skips to a specific song in the queue
-**/volume** - Change music volume` })
+			// { name: "Music", value: `Only work in ${cmdChannel}
+			// **/clearqueue** - Clear all the music in the queue
+			// */current** - Shows the song currently playing
+			// */leave** - Kick the bot from the voice channel
+			// **/loop** - Enable or disable looping of songs or the whole queue
+			// **/lyrics** - Current song lyrics
+			// **/pause** - Pauses the current song
+			// **/play** - Play a song from YouTube, Spotify or Soundcloud
+			// **/previous** - Replays previous song
+			// **/queue** - Shows first 10 songs in the queue
+			// **/resume** - Resumes the current song
+			// **/shuffle** - Shuffles the playlist
+			// **/skip** - Skips the current song
+			// **/skipto** - Skips to a specific song in the queue
+			// **/volume** - Change music volume` }
+			)
 			.setTimestamp()
 			.setFooter({ text: `© ${interaction.client.user.username} Bot`, iconURL: interaction.client.user.displayAvatarURL({ dynamic: true, size: 2048, extension: "png" }) });
 		await interaction.reply({ embeds: [embed] });
