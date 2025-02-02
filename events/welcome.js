@@ -9,7 +9,7 @@ module.exports = {
 			// Ignore Bot
 			if (member.user.bot) return;
 			// Ignore test account
-			if (member.user.id == "645470684419719170") return;
+			if (member.user.id == "0") return;
 
 			// Check if role exist
 			const checkRole = member.guild.roles.cache.find(role => role.name === process.env.newMemberRole);

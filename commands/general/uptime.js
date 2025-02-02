@@ -1,6 +1,6 @@
 const { SlashCommandBuilder } = require("discord.js");
-const moment = require("moment"); // import moment module
-const os = require("os"); // import "os" module
+const moment = require("moment");
+const os = require("os");
 require("moment-duration-format");
 
 module.exports = {

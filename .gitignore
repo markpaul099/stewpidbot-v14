@@ -21,6 +21,7 @@ example-command.js
 react-config.js
 commands/admin/test.js
 events/cron.js.disabled
+commands/music
 .dockerignore
 Dockerfile
 .censitive
@@ -57,6 +58,7 @@ build/Release
 
 # Dependency directories
 node_modules/
+node_modules-bak/
 jspm_packages/
 
 # TypeScript v1 declaration files
