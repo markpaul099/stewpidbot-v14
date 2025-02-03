@@ -27,6 +27,7 @@ Dockerfile
 .censitive
 config-sample.json
 .vscode
+music-commands-broken
 
 # Runtime data
 pids
