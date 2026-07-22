@@ -45,6 +45,6 @@ module.exports = {
 
 		message.edit({ embeds: [embed] });
 		await interaction.reply("Edited the embed.");
-		setTimeout(() => interaction.deleteReply(), 5000);
+		setTimeout(() => {interaction.deleteReply().catch(() => { /* Absorb error if user deleted it first */ });}, 5000);
 	},
 };

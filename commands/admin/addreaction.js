@@ -31,6 +31,8 @@ module.exports = {
 
 		await message.react(Reaction);
 		await interaction.reply("added raction");
-		setTimeout(() => interaction.deleteReply(), 5000);
+		setTimeout(() => {
+			interaction.deleteReply().catch(() => { /* Absorb error if user deleted it first */ });
+		}, 5000);
 	},
 };
