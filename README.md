@@ -1,3 +1,0 @@
-# Stewpid Bot
-
-A simple Personal General Bot that can run on multiple server, play music, play games, manage message, etc...
