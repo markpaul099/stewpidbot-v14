@@ -1,7 +1,6 @@
 const { Events, ActivityType } = require("discord.js");
 const Levels = require("@markpaul099/discord-xp");
 const networkState = require("../networkState.js");
-const { Player } = require("discord-player");
 
 module.exports = {
 	name: Events.ClientReady,
