@@ -62,6 +62,8 @@ module.exports = {
 			.setTimestamp()
 			.setFooter({ text: `© ${interaction.client.user.username} Bot`, iconURL: interaction.client.user.displayAvatarURL({ dynamic: true, size: 2048, extension: "png" }) });
 		await interaction.reply({ embeds: [embed] });
-		setTimeout(() => interaction.deleteReply(), 60000);
+		setTimeout(() => {
+			interaction.deleteReply().catch(() => { /* Absorb error if user deleted it first */ });
+		}, 60000);
 	},
 };

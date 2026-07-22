@@ -43,6 +43,8 @@ module.exports = {
 			},
 		};
 		await interaction.reply({ embeds: [embed] });
-		setTimeout(() => interaction.deleteReply(), 60000);
+		setTimeout(() => {
+			interaction.deleteReply().catch(() => { /* Absorb error if user deleted it first */ });
+		}, 60000);
 	},
 };

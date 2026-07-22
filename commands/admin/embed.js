@@ -37,6 +37,6 @@ module.exports = {
 
 		await channel.send({ embeds: [embed] });
 		await interaction.reply("embed sent.");
-		setTimeout(() => interaction.deleteReply(), 5000);
+		setTimeout(() => {interaction.deleteReply().catch(() => { /* Absorb error if user deleted it first */ });}, 5000);
 	},
 };

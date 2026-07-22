@@ -31,6 +31,6 @@ module.exports = {
 
 		message.edit(description);
 		await interaction.reply("Edited the message.");
-		setTimeout(() => interaction.deleteReply(), 5000);
+		setTimeout(() => {interaction.deleteReply().catch(() => { /* Absorb error if user deleted it first */ });}, 5000);
 	},
 };

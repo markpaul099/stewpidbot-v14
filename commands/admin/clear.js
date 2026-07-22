@@ -48,7 +48,7 @@ module.exports = {
 			await interaction.channel.bulkDelete(amount, true).then(messages => {
 				result.setDescription(`Succesfully deleted ${messages.size} messages the channel.`);
 				interaction.reply({ embeds: [result] });
-				setTimeout(() => interaction.deleteReply(), 5000);
+				setTimeout(() => {interaction.deleteReply().catch(() => { /* Absorb error if user deleted it first */ });}, 5000);
 			});
 		}
 	},

@@ -42,7 +42,7 @@ module.exports = {
 
 		await interaction.reply({ embeds: [embed] });
 		setTimeout(async () => {
-			await interaction.deleteReply();
+			await interaction.deleteReply().catch(() => { /* Absorb error if user deleted it first */ });
 		}, 10000);
 		await logs.send({ embeds: [embed] });
 	},

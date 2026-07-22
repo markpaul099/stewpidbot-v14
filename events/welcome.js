@@ -44,8 +44,6 @@ module.exports = {
 			const canvas = Canvas.createCanvas(700, 250);
 			const context = canvas.getContext("2d");
 
-
-
 			const background = await Canvas.loadImage(imagePath);
 			context.drawImage(background, 0, 0, 700, 250);
 
