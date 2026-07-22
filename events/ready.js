@@ -1,6 +1,7 @@
 const { Events, ActivityType, EmbedBuilder, Routes, DataResolver } = require("discord.js");
 const Levels = require("@markpaul099/discord-xp");
 const { Player } = require("discord-player");
+const networkState = require("../networkState.js");
 
 module.exports = {
 	name: Events.ClientReady,
@@ -27,6 +28,7 @@ ${client.channels.cache.size} channels and ${client.users.cache.size} users cach
 
 		// Set Bot's Pressence/Activity
 		setInterval(() => {
+			if (networkState.isInternetDown) return;
 			const list = [
 				{ type: ActivityType.Watching, name: "for /help" },
 				{ type: ActivityType.Watching, name: `Servers: ${client.guilds.cache.size}` },
