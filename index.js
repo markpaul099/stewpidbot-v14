@@ -1,3 +1,21 @@
+process.on("unhandledRejection", (error) => {
+	// Intercept and swallow internal DNS lookup failures during ISP outages
+	if (error?.code === "ENOTFOUND" || error?.code === "EAI_AGAIN") {
+		console.warn("[Process Guard] Swallowed background DNS error:", error.message);
+		return;
+	}
+	console.error("[Process Guard] Unhandled promise rejection:", error);
+});
+
+process.on("uncaughtException", (error) => {
+	if (error?.code === "ENOTFOUND" || error?.code === "EAI_AGAIN") {
+		console.warn("[Process Guard] Swallowed uncaught DNS exception:", error.message);
+		return;
+	}
+	console.error("[Process Guard] Uncaught Exception:", error);
+	process.exit(1); // Exit for actual structural syntax/runtime bugs
+});
+
 const { Client, Collection, GatewayIntentBits, Partials } = require("discord.js");
 const fs = require("node:fs");
 const path = require("node:path");
