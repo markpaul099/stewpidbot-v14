@@ -1,33 +1,40 @@
-const { SlashCommandBuilder } = require("discord.js");
+const { SlashCommandBuilder, EmbedBuilder } = require("discord.js");
 
 module.exports = {
 	data: new SlashCommandBuilder()
 		.setName("ping")
-		.setDescription("Bot's Ping"),
+		.setDescription("Checks the bot's connection and latency."),
 	async execute(interaction) {
-		// 1. Initial reply to establish the benchmark timestamp.
-		// fetchReply: true forces Discord to return the full message payload back to us.
-		const sent = await interaction.reply({
-			content: "Calculating latency...",
-			fetchReply: true,
-		}).catch(console.error);
+		try {
+			const response = await interaction.deferReply({
+				ephemeral: true,
+				withResponse: true,
+			});
 
-		if (!sent) return;
+			const roundTripLatency = response.resource.message.createdTimestamp - interaction.createdTimestamp;
+			const websocketLatency = interaction.client.ws.ping;
 
-		// 2. Perform the time-difference math
-		const roundTripLatency = sent.createdTimestamp - interaction.createdTimestamp;
-		const websocketLatency = interaction.client.ws.ping;
+			let pingColor = "Green";
+			if (roundTripLatency > 250) pingColor = "Yellow";
+			if (roundTripLatency > 500) pingColor = "Red";
 
-		// 3. Edit the initial response with the actual combined metrics
-		await interaction.editReply(
-			"🏓 **Pong!**\n" +
-			`🤖 **Bot Latency (Round-trip):** \`${roundTripLatency} ms\`\n` +
-			`🌐 **WebSocket Latency (Gateway):** \`${websocketLatency} ms\``,
-		).catch(console.error);
+			const pingEmbed = new EmbedBuilder()
+				.setTitle("🏓 Pong!")
+				.setColor(pingColor)
+				.addFields(
+					{ name: "🤖 Bot Latency", value: `\`${roundTripLatency} ms\``, inline: true },
+					{ name: "🌐 Gateway (WS)", value: `\`${websocketLatency} ms\``, inline: true },
+				)
+				.setTimestamp();
 
-		// 4. Your 60-second cleanup timer
-		setTimeout(() => {
-			interaction.deleteReply().catch(() => { /* Absorb error if user deleted it first */ });
-		}, 60000);
+			await interaction.editReply({ embeds: [pingEmbed] });
+
+		} catch (error) {
+			console.error("[Ping Command] Failed to execute:", error);
+
+			if (interaction.deferred || interaction.replied) {
+				await interaction.editReply({ content: "❌ Could not calculate ping." }).catch(() => { /* Catch */ });
+			}
+		}
 	},
 };
