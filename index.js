@@ -1,3 +1,4 @@
+// Intercept and swallow internal DNS lookup failures during ISP outages
 process.on("unhandledRejection", (error) => {
 	// Intercept and swallow internal DNS lookup failures during ISP outages
 	if (error?.code === "ENOTFOUND" || error?.code === "EAI_AGAIN") {
@@ -13,10 +14,10 @@ process.on("uncaughtException", (error) => {
 		return;
 	}
 	console.error("[Process Guard] Uncaught Exception:", error);
-	process.exit(1); // Exit for actual structural syntax/runtime bugs
+	process.exit(1);
 });
 
-const { Client, Collection, GatewayIntentBits, Partials } = require("discord.js");
+const { Client, Collection, GatewayIntentBits, Partials, Options } = require("discord.js");
 const fs = require("node:fs");
 const path = require("node:path");
 require("dotenv").config();
@@ -28,10 +29,8 @@ const client = new Client ({
 		GatewayIntentBits.MessageContent,
 		GatewayIntentBits.GuildWebhooks,
 		GatewayIntentBits.GuildScheduledEvents,
-		GatewayIntentBits.GuildPresences,
 		GatewayIntentBits.GuildModeration,
 		GatewayIntentBits.GuildMessages,
-		GatewayIntentBits.GuildMessageTyping,
 		GatewayIntentBits.GuildMessageReactions,
 		GatewayIntentBits.GuildMembers,
 		GatewayIntentBits.GuildInvites,
@@ -47,6 +46,22 @@ const client = new Client ({
 		Partials.Channel,
 		Partials.GuildMember,
 	],
+
+	// Cache Sweeper and Manager Options
+	makeCache: Options.cacheWithLimits({
+		...Options.DefaultMakeCacheSettings,
+		MessageManager: 50, // Only keep the last 50 messages per channel in RAM
+		ThreadManager: 20,
+		PresenceManager: 0, // Set to 0 if your bot doesn't need to know user statuses (Online/DND)
+		ReactionManager: 10,
+		ReactionUserManager: 10,
+		GuildMemberManager: {
+			maxSize: 100,
+			keepOverLimit: member => member.id === member.client.user?.id, // Always keep the bot itself cached
+		},
+	}),
+
+	// WebSocket and REST Options
 	ws: {
 		closeTimeout: 10000,
 	},
