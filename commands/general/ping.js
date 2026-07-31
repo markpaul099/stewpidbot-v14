@@ -1,4 +1,4 @@
-const { SlashCommandBuilder, EmbedBuilder } = require("discord.js");
+const { SlashCommandBuilder, EmbedBuilder, MessageFlags } = require("discord.js");
 
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -7,7 +7,7 @@ module.exports = {
 	async execute(interaction) {
 		try {
 			const response = await interaction.deferReply({
-				ephemeral: true,
+				flags: [MessageFlags.Ephemeral],
 				withResponse: true,
 			});
 
