@@ -49,12 +49,6 @@ const client = new Client ({
 	],
 	ws: {
 		closeTimeout: 10000,
-		buildStrategy: (manager) => {
-			if (manager.options.ws) {
-				manager.options.ws.buildStrategy = undefined;
-			}
-			return manager.strategy;
-		},
 	},
 
 	rest: {
