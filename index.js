@@ -47,6 +47,20 @@ const client = new Client ({
 		Partials.Channel,
 		Partials.GuildMember,
 	],
+	ws: {
+		closeTimeout: 10000,
+		buildStrategy: (manager) => {
+			if (manager.options.ws) {
+				manager.options.ws.buildStrategy = undefined;
+			}
+			return manager.strategy;
+		},
+	},
+
+	rest: {
+		timeout: 15000,
+		retries: 3,
+	},
 });
 
 // Command Handler
