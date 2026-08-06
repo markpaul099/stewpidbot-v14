@@ -1,4 +1,4 @@
-const { SlashCommandBuilder, PermissionFlagsBits } = require("discord.js");
+const { SlashCommandBuilder, PermissionFlagsBits, MessageFlags } = require("discord.js");
 
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -7,11 +7,11 @@ module.exports = {
 		.setDefaultMemberPermissions(PermissionFlagsBits.Administrator),
 	async execute(interaction) {
 		try {
-			await interaction.deferReply();
+			await interaction.deferReply({ flags: [MessageFlags.Ephemeral], withResponse: true });
 			// Shutdown bot and let PM2 restart the bot
 			await interaction.editReply("Restarting...");
 			setTimeout(() =>
-				interaction.editReply("Bot Restarted").catch(() => {}), 3000);
+				interaction.editReply("Bot Restarted").catch(() => {/* Catch */ }), 3000);
 
 			setTimeout(() => {
 				interaction.client.destroy();
