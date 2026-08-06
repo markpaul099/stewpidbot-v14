@@ -6,7 +6,20 @@ module.exports = {
 		.setName("coinflip")
 		.setDescription("flip a coin!"),
 	async execute(interaction) {
-		const result = coin[Math.floor(Math.random() * coin.length)];
-		await interaction.reply(`Result: ${result}`);
+		try {
+			await interaction.deferReply();
+			const result = coin[Math.floor(Math.random() * coin.length)];
+			await interaction.editReply(`Result: ${result}`);
+			setTimeout(() => interaction.deleteReply(), 60000);
+		} catch (error) {
+			console.error("Error in coinflip command:", error);
+			const errorMessage = "An error occurred while flipping the coin. Please try again.";
+			if (interaction.deferred) {
+				await interaction.editReply(errorMessage);
+			} else {
+				await interaction.reply(errorMessage);
+			}
+			setTimeout(() => interaction.deleteReply(), 10000);
+		}
 	},
 };

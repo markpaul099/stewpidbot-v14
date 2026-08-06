@@ -24,19 +24,31 @@ module.exports = {
 				.setDescription("Embed color (hex)"))
 		.setDefaultMemberPermissions(PermissionFlagsBits.Administrator),
 	async execute(interaction) {
-		const channelName = interaction.options.getChannel("channel");
-		const content = interaction.options.getString("content");
-		const color = interaction.options.getString("color");
-		const title = interaction.options.getString("title");
+		try {
+			await interaction.deferReply();
+			const channelName = interaction.options.getChannel("channel");
+			const content = interaction.options.getString("content");
+			const color = interaction.options.getString("color");
+			const title = interaction.options.getString("title");
 
-		const channel = await interaction.guild.channels.cache.get(channelName.id);
-		const embed = new EmbedBuilder()
-			.setTitle(title)
-			.setColor(color)
-			.setDescription(content);
+			const channel = await interaction.guild.channels.cache.get(channelName.id);
+			const embed = new EmbedBuilder()
+				.setTitle(title)
+				.setColor(color)
+				.setDescription(content);
 
-		await channel.send({ embeds: [embed] });
-		await interaction.reply("embed sent.");
-		setTimeout(() => interaction.deleteReply(), 5000);
+			await channel.send({ embeds: [embed] });
+			await interaction.editReply("embed sent.");
+			setTimeout(() => interaction.deleteReply(), 5000);
+		} catch (error) {
+			console.error("Error in embed command:", error);
+			const errorMessage = "An error occurred while sending the embed. Please try again.";
+			if (interaction.deferred) {
+				await interaction.editReply(errorMessage);
+			} else {
+				await interaction.reply(errorMessage);
+			}
+			setTimeout(() => interaction.deleteReply(), 10000);
+		}
 	},
 };

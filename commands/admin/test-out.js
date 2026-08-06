@@ -6,7 +6,20 @@ module.exports = {
 		.setDescription("Simulate Leave")
 		.setDefaultMemberPermissions(PermissionFlagsBits.Administrator),
 	async execute(interaction) {
-		await interaction.client.emit("guildMemberRemove", interaction.member);
-		interaction.reply("Emited GuildMemberRemove");
+		try {
+			await interaction.deferReply();
+			await interaction.client.emit("guildMemberRemove", interaction.member);
+			await interaction.editReply("Emited GuildMemberRemove");
+			setTimeout(() => interaction.deleteReply(), 10000);
+		} catch (error) {
+			console.error("Error in test-out command:", error);
+			const errorMessage = "An error occurred while simulating leave. Please try again.";
+			if (interaction.deferred) {
+				await interaction.editReply(errorMessage);
+			} else {
+				await interaction.reply(errorMessage);
+			}
+			setTimeout(() => interaction.deleteReply(), 10000);
+		}
 	},
 };

@@ -5,7 +5,17 @@ module.exports = {
 		.setName("ping")
 		.setDescription("Bot's Ping"),
 	async execute(interaction) {
-		await interaction.reply("Bot Ping = " + `\`${interaction.client.ws.ping} ms\``).catch(console.error);
-		setTimeout(() => interaction.deleteReply(), 60000);
+		try {
+			await interaction.deferReply();
+			const ping = await interaction.client.ws.ping;
+			await interaction.editReply({ content: "Bot Ping = " + `\`${ping} ms\`` });
+
+			setTimeout(() => interaction.deleteReply(), 60000);
+		} catch (error) {
+			console.error(error);
+			if (!interaction.deferred && !interaction.replied) {
+				await interaction.editReply({ content: "There was an error while executing this command!" });
+			}
+		}
 	},
 };

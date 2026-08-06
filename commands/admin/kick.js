@@ -16,27 +16,42 @@ module.exports = {
 				.setRequired(false))
 		.setDefaultMemberPermissions(PermissionFlagsBits.Administrator),
 	async execute(interaction) {
-		const user = interaction.options.getUser("user");
-		const reason = interaction.options.getString("reason") || "No reason provided";
+		try {
+			await interaction.deferReply();
+			const user = interaction.options.getUser("user");
+			const reason = interaction.options.getString("reason") || "No reason provided";
 
-		const member = await interaction.guild.members.fetch(user.id);
-		console.log(member);
+			const member = await interaction.guild.members.fetch(user.id);
+			console.log(member);
 
-		const errEmbed = new EmbedBuilder()
-			.setDescription(`You can't take action on ${member.displayName} since they have a higher role.`)
-			.setColor("#2B65EC");
+			const errEmbed = new EmbedBuilder()
+				.setDescription(`You can't take action on ${member.displayName} since they have a higher role.`)
+				.setColor("#2B65EC");
 
-		if (member.roles.highest.position >= interaction.member.roles.highest.position) {
-			return interaction.reply({ embeds: [errEmbed] });
+			if (member.roles.highest.position >= interaction.member.roles.highest.position) {
+				await interaction.editReply({ embeds: [errEmbed] });
+				setTimeout(() => interaction.deleteReply(), 10000);
+				return;
+			}
+
+			await member.kick(reason);
+
+			const embed = new EmbedBuilder()
+				.setDescription(`Succesfully kicked ${member.displayName} with reason:\n ${reason}`)
+				.setColor("#2B65EC")
+				.setTimestamp();
+
+			await interaction.editReply({ embeds: [embed] });
+			setTimeout(() => interaction.deleteReply(), 10000);
+		} catch (error) {
+			console.error("Error in kick command:", error);
+			const errorMessage = "An error occurred while kicking the user. Please try again.";
+			if (interaction.deferred) {
+				await interaction.editReply(errorMessage);
+			} else {
+				await interaction.reply(errorMessage);
+			}
+			setTimeout(() => interaction.deleteReply(), 10000);
 		}
-
-		await member.kick(reason);
-
-		const embed = new EmbedBuilder()
-			.setDescription(`Succesfully banned ${member.displayName} with reason:\n ${reason}`)
-			.setColor("#2B65EC")
-			.setTimestamp();
-
-		await interaction.reply({ embeds: [embed] });
 	},
 };

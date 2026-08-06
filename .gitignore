@@ -27,6 +27,7 @@ Dockerfile
 .censitive
 config-sample.json
 .vscode
+disabled/
 
 # Runtime data
 pids
