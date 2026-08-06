@@ -1,5 +1,7 @@
 const { AttachmentBuilder, Events, Colors } = require("discord.js");
 const Canvas = require("canvas");
+const path = require("path");
+const imagePath = path.join(__dirname, "..", "assets", "welcome.jpg");
 require("dotenv").config();
 
 module.exports = {
@@ -43,7 +45,7 @@ module.exports = {
 			const canvas = Canvas.createCanvas(700, 250);
 			const context = canvas.getContext("2d");
 
-			const background = await Canvas.loadImage("https://i.ibb.co/wFcZc4SP/image-2025-02-03-012442032.png");
+			const background = await Canvas.loadImage(imagePath);
 			context.drawImage(background, 0, 0, 700, 250);
 
 			context.strokeStyle = "#74037b";

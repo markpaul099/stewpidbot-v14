@@ -1,5 +1,10 @@
 const { Events, ActivityType } = require("discord.js");
+<<<<<<< HEAD
 // const Levels = require("@markpaul099/discord-xp");
+=======
+const Levels = require("@markpaul099/discord-xp");
+const networkState = require("../networkState.js");
+>>>>>>> 2d5dc70b996201993a0d74ee723a375e2c9ba190
 
 module.exports = {
 	name: Events.ClientReady,
@@ -21,6 +26,7 @@ ${client.channels.cache.size} channels and ${client.users.cache.size} users cach
 
 		// Set Bot's Pressence/Activity
 		setInterval(() => {
+			if (networkState.isInternetDown) return;
 			const list = [
 				{ type: ActivityType.Watching, name: "for /help" },
 				{ type: ActivityType.Watching, name: `Servers: ${client.guilds.cache.size}` },

@@ -1,9 +1,9 @@
-const { SlashCommandBuilder } = require("discord.js");
+const { SlashCommandBuilder, EmbedBuilder, MessageFlags } = require("discord.js");
 
 module.exports = {
 	data: new SlashCommandBuilder()
 		.setName("ping")
-		.setDescription("Bot's Ping"),
+		.setDescription("Checks the bot's connection and latency."),
 	async execute(interaction) {
 		try {
 			await interaction.deferReply();
