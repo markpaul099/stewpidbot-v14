@@ -28,7 +28,7 @@ module.exports = {
 			const msgId = interaction.options.getString("message");
 			const description = interaction.options.getString("content").replace(/\\n/g, "\r\n");
 
-			const channel = await interaction.guild.channels.cache.get(channelName.id);
+			const channel = interaction.guild.channels.cache.get(channelName.id);
 			const message = await channel.messages.fetch(msgId);
 
 			await message.edit(description);

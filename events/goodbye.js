@@ -10,7 +10,7 @@ module.exports = {
 			if (member.user.bot) return;
 
 			// LOGS' Channel
-			const logsChannel = await member.guild.channels.cache.find(channel => channel.name === process.env.logsChannel);
+			const logsChannel = member.guild.channels.cache.find(c => c.name === process.env.logsChannel);
 
 			// Create Embed
 			const embed = new EmbedBuilder()

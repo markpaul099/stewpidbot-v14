@@ -31,7 +31,7 @@ module.exports = {
 			const color = interaction.options.getString("color");
 			const title = interaction.options.getString("title");
 
-			const channel = await interaction.guild.channels.cache.get(channelName.id);
+			const channel = interaction.guild.channels.cache.get(channelName.id);
 			const embed = new EmbedBuilder()
 				.setTitle(title)
 				.setColor(color)

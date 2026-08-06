@@ -6,7 +6,7 @@ module.exports = {
 	once: false,
 
 	async execute(message) {
-		const requestCh = await message.guild.channels.cache.find(channel => channel.name === process.env.requestChannel);
+		const requestCh = message.guild.channels.cache.find(c => c.name === process.env.requestChannel);
 		if (message.channel.id != requestCh || message.author.bot) return;
 
 		setTimeout(() => message.delete(), 60000);

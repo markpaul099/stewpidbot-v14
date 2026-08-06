@@ -37,7 +37,7 @@ module.exports = {
 			const description = interaction.options.getString("description").replace(/\\n/g, "\r\n");
 			const color = interaction.options.getString("color");
 
-			const channel = await interaction.guild.channels.cache.get(channelName.id);
+			const channel = interaction.guild.channels.cache.get(channelName.id);
 			const message = await channel.messages.fetch(msgId);
 
 			const embed = EmbedBuilder.from(message.embeds[0])

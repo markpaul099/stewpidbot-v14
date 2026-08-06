@@ -7,7 +7,7 @@ module.exports = {
 		.setDescription("Find Fruit"),
 	async execute(interaction) {
 
-		const cmdChannel = await interaction.guild.channels.cache.find(channel => channel.name === process.env.commandChannel);
+		const cmdChannel = interaction.guild.channels.cache.find(c => c.name === process.env.commandChannel);
 		if (cmdChannel.id !== interaction.channel.id) {
 			interaction.reply(
 				`use ${cmdChannel} for game commands`,
