@@ -15,40 +15,49 @@ module.exports = {
 					{ name: "Hard", value: "hard" },
 				)),
 	async execute(interaction) {
+		try {
+			const cmdChannel = await interaction.guild.channels.cache.find(channel => channel.name === process.env.commandChannel);
+			if (cmdChannel.id !== interaction.channel.id) {
+				await interaction.reply(
+					`use ${cmdChannel} for game commands`,
+				);
+				setTimeout(() => {
+					interaction.deleteReply();
+				}, 5000);
+				return;
+			}
 
-		const cmdChannel = await interaction.guild.channels.cache.find(channel => channel.name === process.env.commandChannel);
-		if (cmdChannel.id !== interaction.channel.id) {
-			interaction.reply(
-				`use ${cmdChannel} for game commands`,
-			);
-			setTimeout(() => {
-				interaction.deleteReply();
-			}, 5000);
-			return;
+			const dificulty = interaction.options.getString("dificulty") || "medium";
+
+			const Game = new Trivia({
+				message: interaction,
+				isSlashGame: true,
+				embed: {
+					title: "Trivia",
+					color: "#2F3136",
+					description: "you have 60 seconds to guess the answer.",
+				},
+				timeoutTime: 60000,
+				buttonStyle: "PRIMARY",
+				trueButtonStyle: "SUCCESS",
+				falseButtonStyle: "DANGER",
+				mode: "multiple", // multiple || single
+				difficulty: dificulty, // easy || medium || hard
+				winMessage: "you won! the correct answer is {answer}.",
+				loseMessage: "you lost! the correct answer is {answer}.",
+				errMessage: "unable to fetch question data! Please try again.",
+				playerOnlyMessage: "only {player} can use these buttons.",
+			});
+
+			Game.startGame();
+		} catch (error) {
+			console.error("Error in trivia command:", error);
+			const errorMessage = "An error occurred while starting the game. Please try again.";
+			if (interaction.replied || interaction.deferred) {
+				await interaction.followUp({ content: errorMessage, ephemeral: true });
+			} else {
+				await interaction.reply({ content: errorMessage, ephemeral: true });
+			}
 		}
-
-		const dificulty = interaction.options.getString("dificulty") || "medium";
-
-		const Game = new Trivia({
-			message: interaction,
-			isSlashGame: true,
-			embed: {
-				title: "Trivia",
-				color: "#2F3136",
-				description: "you have 60 seconds to guess the answer.",
-			},
-			timeoutTime: 60000,
-			buttonStyle: "PRIMARY",
-			trueButtonStyle: "SUCCESS",
-			falseButtonStyle: "DANGER",
-			mode: "multiple", // multiple || single
-			difficulty: dificulty, // easy || medium || hard
-			winMessage: "you won! the correct answer is {answer}.",
-			loseMessage: "you lost! the correct answer is {answer}.",
-			errMessage: "unable to fetch question data! Please try again.",
-			playerOnlyMessage: "only {player} can use these buttons.",
-		});
-
-		Game.startGame();
 	},
 };

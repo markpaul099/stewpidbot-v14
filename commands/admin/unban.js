@@ -11,23 +11,37 @@ module.exports = {
 				.setRequired(true))
 		.setDefaultMemberPermissions(PermissionFlagsBits.Administrator),
 	async execute(interaction) {
-		const userId = interaction.options.getString("userid");
-
 		try {
-			await interaction.guild.members.unban(userId);
+			await interaction.deferReply();
+			const userId = interaction.options.getString("userid");
 
-			const embed = new EmbedBuilder()
-				.setDescription(`Succesfully unban id: ${userId} from the server.`)
-				.setColor("#2B65EC")
-				.setTimestamp();
+			try {
+				await interaction.guild.members.unban(userId);
 
-			await interaction.reply({ embeds: [embed] });
-		} catch (err) {
-			const errEmbed = new EmbedBuilder()
-				.setDescription("Please provide a valid user's ID.")
-				.setColor("#2B65EC");
+				const embed = new EmbedBuilder()
+					.setDescription(`Succesfully unban id: ${userId} from the server.`)
+					.setColor("#2B65EC")
+					.setTimestamp();
 
-			interaction.reply({ embeds: [errEmbed] });
+				await interaction.editReply({ embeds: [embed] });
+				setTimeout(() => interaction.deleteReply(), 10000);
+			} catch (err) {
+				const errEmbed = new EmbedBuilder()
+					.setDescription("Please provide a valid user's ID.")
+					.setColor("#2B65EC");
+
+				await interaction.editReply({ embeds: [errEmbed] });
+				setTimeout(() => interaction.deleteReply(), 10000);
+			}
+		} catch (error) {
+			console.error("Error in unban command:", error);
+			const errorMessage = "An error occurred while unbanning the user. Please try again.";
+			if (interaction.deferred) {
+				await interaction.editReply(errorMessage);
+			} else {
+				await interaction.reply(errorMessage);
+			}
+			setTimeout(() => interaction.deleteReply(), 10000);
 		}
 	},
 };

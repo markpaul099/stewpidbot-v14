@@ -22,15 +22,27 @@ module.exports = {
 				.setRequired(true))
 		.setDefaultMemberPermissions(PermissionFlagsBits.Administrator),
 	async execute(interaction) {
-		const channelName = interaction.options.getChannel("channel");
-		const msgId = interaction.options.getString("message");
-		const Reaction = interaction.options.getString("reaction");
+		try {
+			await interaction.deferReply();
+			const channelName = interaction.options.getChannel("channel");
+			const msgId = interaction.options.getString("message");
+			const Reaction = interaction.options.getString("reaction");
 
-		const channel = await interaction.guild.channels.cache.get(channelName.id);
-		const message = await channel.messages.fetch(msgId);
+			const channel = await interaction.guild.channels.cache.get(channelName.id);
+			const message = await channel.messages.fetch(msgId);
 
-		await message.react(Reaction);
-		await interaction.reply("added raction");
-		setTimeout(() => interaction.deleteReply(), 5000);
+			await message.react(Reaction);
+			await interaction.editReply("added reaction");
+			setTimeout(() => interaction.deleteReply(), 5000);
+		} catch (error) {
+			console.error("Error in addreaction command:", error);
+			const errorMessage = "An error occurred while adding reaction. Please try again.";
+			if (interaction.deferred) {
+				await interaction.editReply(errorMessage);
+			} else {
+				await interaction.reply(errorMessage);
+			}
+			setTimeout(() => interaction.deleteReply(), 10000);
+		}
 	},
 };

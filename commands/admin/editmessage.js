@@ -22,15 +22,27 @@ module.exports = {
 				.setRequired(true))
 		.setDefaultMemberPermissions(PermissionFlagsBits.Administrator),
 	async execute(interaction) {
-		const channelName = interaction.options.getChannel("channel");
-		const msgId = interaction.options.getString("message");
-		const description = interaction.options.getString("content").replace(/\\n/g, "\r\n");
+		try {
+			await interaction.deferReply();
+			const channelName = interaction.options.getChannel("channel");
+			const msgId = interaction.options.getString("message");
+			const description = interaction.options.getString("content").replace(/\\n/g, "\r\n");
 
-		const channel = await interaction.guild.channels.cache.get(channelName.id);
-		const message = await channel.messages.fetch(msgId);
+			const channel = await interaction.guild.channels.cache.get(channelName.id);
+			const message = await channel.messages.fetch(msgId);
 
-		message.edit(description);
-		await interaction.reply("Edited the message.");
-		setTimeout(() => interaction.deleteReply(), 5000);
+			await message.edit(description);
+			await interaction.editReply("Edited the message.");
+			setTimeout(() => interaction.deleteReply(), 5000);
+		} catch (error) {
+			console.error("Error in editmessage command:", error);
+			const errorMessage = "An error occurred while editing the message. Please try again.";
+			if (interaction.deferred) {
+				await interaction.editReply(errorMessage);
+			} else {
+				await interaction.reply(errorMessage);
+			}
+			setTimeout(() => interaction.deleteReply(), 10000);
+		}
 	},
 };

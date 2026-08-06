@@ -18,38 +18,50 @@ module.exports = {
 				.setRequired(false))
 		.setDefaultMemberPermissions(PermissionFlagsBits.Administrator),
 	async execute(interaction) {
-		const amount = interaction.options.getInteger("amount");
-		const user = interaction.options.getUser("user");
+		try {
+			await interaction.deferReply();
+			const amount = interaction.options.getInteger("amount");
+			const user = interaction.options.getUser("user");
 
-		const messages = await interaction.channel.messages.fetch({
-			limit: amount + 1,
-		});
-
-		const result = new EmbedBuilder()
-			.setColor("#2B65EC");
-
-		if (user) {
-			let i = 0;
-			const filtered = [];
-
-			(await messages).filter((msg) => {
-				if (messages.author.id === user.id && amount > i) {
-					filtered.push(msg);
-					i++;
-				}
+			const messages = await interaction.channel.messages.fetch({
+				limit: amount + 1,
 			});
 
-			await interaction.channel.bulkDelete(filtered).then(messages => {
-				result.setDescription(`Succesfully deleted ${messages.size} messages from ${user}.`);
-				interaction.reply({ embeds: [result] });
-				setTimeout(() => interaction.deleteReply(), 5000);
-			});
-		} else {
-			await interaction.channel.bulkDelete(amount, true).then(messages => {
-				result.setDescription(`Succesfully deleted ${messages.size} messages the channel.`);
-				interaction.reply({ embeds: [result] });
-				setTimeout(() => interaction.deleteReply(), 5000);
-			});
+			const result = new EmbedBuilder()
+				.setColor("#2B65EC");
+
+			if (user) {
+				let i = 0;
+				const filtered = [];
+
+				(await messages).filter((msg) => {
+					if (msg.author.id === user.id && amount > i) {
+						filtered.push(msg);
+						i++;
+					}
+				});
+
+				await interaction.channel.bulkDelete(filtered).then(messages => {
+					result.setDescription(`Succesfully deleted ${messages.size} messages from ${user}.`);
+					interaction.editReply({ embeds: [result] });
+					setTimeout(() => interaction.deleteReply(), 5000);
+				});
+			} else {
+				await interaction.channel.bulkDelete(amount, true).then(messages => {
+					result.setDescription(`Succesfully deleted ${messages.size} messages from the channel.`);
+					interaction.editReply({ embeds: [result] });
+					setTimeout(() => interaction.deleteReply(), 5000);
+				});
+			}
+		} catch (error) {
+			console.error("Error in clear command:", error);
+			const errorMessage = "An error occurred while clearing messages. Please try again.";
+			if (interaction.deferred) {
+				await interaction.editReply(errorMessage);
+			} else {
+				await interaction.reply(errorMessage);
+			}
+			setTimeout(() => interaction.deleteReply(), 10000);
 		}
 	},
 };

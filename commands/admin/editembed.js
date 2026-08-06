@@ -29,22 +29,34 @@ module.exports = {
 				.setDescription("Text inside the embed"))
 		.setDefaultMemberPermissions(PermissionFlagsBits.Administrator),
 	async execute(interaction) {
-		const channelName = interaction.options.getChannel("channel");
-		const msgId = interaction.options.getString("message");
-		const title = interaction.options.getString("title");
-		const description = interaction.options.getString("description").replace(/\\n/g, "\r\n");
-		const color = interaction.options.getString("color");
+		try {
+			await interaction.deferReply();
+			const channelName = interaction.options.getChannel("channel");
+			const msgId = interaction.options.getString("message");
+			const title = interaction.options.getString("title");
+			const description = interaction.options.getString("description").replace(/\\n/g, "\r\n");
+			const color = interaction.options.getString("color");
 
-		const channel = await interaction.guild.channels.cache.get(channelName.id);
-		const message = await channel.messages.fetch(msgId);
+			const channel = await interaction.guild.channels.cache.get(channelName.id);
+			const message = await channel.messages.fetch(msgId);
 
-		const embed = EmbedBuilder.from(message.embeds[0])
-			.setTitle(title)
-			.setColor(color)
-			.setDescription(description);
+			const embed = EmbedBuilder.from(message.embeds[0])
+				.setTitle(title)
+				.setColor(color)
+				.setDescription(description);
 
-		message.edit({ embeds: [embed] });
-		await interaction.reply("Edited the embed.");
-		setTimeout(() => interaction.deleteReply(), 5000);
+			await message.edit({ embeds: [embed] });
+			await interaction.editReply("Edited the embed.");
+			setTimeout(() => interaction.deleteReply(), 5000);
+		} catch (error) {
+			console.error("Error in editembed command:", error);
+			const errorMessage = "An error occurred while editing the embed. Please try again.";
+			if (interaction.deferred) {
+				await interaction.editReply(errorMessage);
+			} else {
+				await interaction.reply(errorMessage);
+			}
+			setTimeout(() => interaction.deleteReply(), 10000);
+		}
 	},
 };

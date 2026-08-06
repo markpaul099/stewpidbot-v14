@@ -1,5 +1,5 @@
 const { Events, ActivityType } = require("discord.js");
-const Levels = require("@markpaul099/discord-xp");
+// const Levels = require("@markpaul099/discord-xp");
 
 module.exports = {
 	name: Events.ClientReady,
@@ -32,7 +32,7 @@ ${client.channels.cache.size} channels and ${client.users.cache.size} users cach
 
 
 		// Set Mongo URL
-		Levels.setURL(process.env.mongoUrl);
+		// Levels.setURL(process.env.mongoUrl);
 
 	},
 };
