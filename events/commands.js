@@ -21,7 +21,7 @@ module.exports = {
 					});
 				}
 			} else if (message.content.startsWith(`${process.env.prefix}announce`)) {
-				const AC = await message.guild.channels.cache.find(channel => channel.name === process.env.newsChannel);
+				const AC = await message.guild.channels.cache.find(c => c.name === process.env.newsChannel);
 				if (message.member.permissionsIn(AC).has(PermissionFlagsBits.SendMessages)) {
 					message.delete();
 					let sentence = message.content.split(" ");

@@ -23,7 +23,7 @@ module.exports = {
 
 			const member = await interaction.guild.members.fetch(user.id);
 
-			const logs = await member.guild.channels.cache.find(channel => channel.name === process.env.logsChannel);
+			const logs = member.guild.channels.cache.find(c => c.name === process.env.logsChannel);
 
 			const errEmbed = new EmbedBuilder()
 				.setDescription(`You can't take action on ${member.displayName} since they have a higher or similar role.`)
