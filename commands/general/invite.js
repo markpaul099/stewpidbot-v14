@@ -1,4 +1,4 @@
-const { SlashCommandBuilder } = require("discord.js");
+const { SlashCommandBuilder, MessageFlags } = require("discord.js");
 
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -6,7 +6,7 @@ module.exports = {
 		.setDescription("Invite link"),
 	async execute(interaction) {
 		try {
-			await interaction.deferReply();
+			await interaction.deferReply({ flags: [MessageFlags.Ephemeral], withResponse: true });
 			const welcome = await interaction.guild.channels.cache.find(channel => channel.name === process.env.welcomeChannel);
 			const invLink = await welcome.createInvite();
 			await interaction.editReply(`Invite link: ${invLink}`);

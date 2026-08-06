@@ -1,4 +1,4 @@
-const { SlashCommandBuilder } = require("discord.js");
+const { SlashCommandBuilder, MessageFlags } = require("discord.js");
 const coin = ["Tails", "Heads"];
 
 module.exports = {
@@ -7,7 +7,7 @@ module.exports = {
 		.setDescription("flip a coin!"),
 	async execute(interaction) {
 		try {
-			await interaction.deferReply();
+			await interaction.deferReply({ flags: [MessageFlags.Ephemeral], withResponse: true });
 			const result = coin[Math.floor(Math.random() * coin.length)];
 			await interaction.editReply(`Result: ${result}`);
 			setTimeout(() => interaction.deleteReply(), 60000);

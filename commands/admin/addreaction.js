@@ -1,4 +1,4 @@
-const { SlashCommandBuilder, PermissionFlagsBits, ChannelType } = require("discord.js");
+const { SlashCommandBuilder, PermissionFlagsBits, ChannelType, MessageFlags } = require("discord.js");
 
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -23,7 +23,7 @@ module.exports = {
 		.setDefaultMemberPermissions(PermissionFlagsBits.Administrator),
 	async execute(interaction) {
 		try {
-			await interaction.deferReply();
+			await interaction.deferReply({ flags: [MessageFlags.Ephemeral], withResponse: true });
 			const channelName = interaction.options.getChannel("channel");
 			const msgId = interaction.options.getString("message");
 			const Reaction = interaction.options.getString("reaction");

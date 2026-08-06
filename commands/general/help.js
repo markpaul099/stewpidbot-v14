@@ -1,4 +1,4 @@
-const { SlashCommandBuilder, EmbedBuilder } = require("discord.js");
+const { SlashCommandBuilder, EmbedBuilder, MessageFlags } = require("discord.js");
 
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -6,7 +6,7 @@ module.exports = {
 		.setDescription("Available Commands"),
 	async execute(interaction) {
 		try {
-			await interaction.deferReply();
+			await interaction.deferReply({ flags: [MessageFlags.Ephemeral], withResponse: true });
 
 			const cmdChannel = await interaction.guild.channels.cache.find(channel => channel.name === process.env.commandChannel);
 			if (cmdChannel.id !== interaction.channel.id) {

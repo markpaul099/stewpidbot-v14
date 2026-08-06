@@ -1,4 +1,4 @@
-const { SlashCommandBuilder } = require("discord.js");
+const { SlashCommandBuilder, MessageFlags } = require("discord.js");
 const moment = require("moment");
 const os = require("os");
 require("moment-duration-format");
@@ -9,7 +9,7 @@ module.exports = {
 		.setDescription("Bot's Uptime"),
 	async execute(interaction) {
 		try {
-			await interaction.deferReply();
+			await interaction.deferReply({ flags: [MessageFlags.Ephemeral], withResponse: true });
 			const hostStr = `${os.uptime}`; // get seconds(float)
 
 			const hostSeconds = hostStr.slice(0, -3); // convert seconds(float) to seconds(integer)

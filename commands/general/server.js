@@ -1,4 +1,4 @@
-const { SlashCommandBuilder } = require("discord.js");
+const { SlashCommandBuilder, MessageFlags } = require("discord.js");
 const moment = require("moment");
 
 module.exports = {
@@ -7,7 +7,7 @@ module.exports = {
 		.setDescription("Provides information about the server"),
 	async execute(interaction) {
 		try {
-			await interaction.deferReply();
+			await interaction.deferReply({ flags: [MessageFlags.Ephemeral], withResponse: true });
 
 			const guild = await interaction.client.guilds.cache.get(interaction.guild.id);
 			const serverOwnerName = await interaction.guild.fetchOwner();
