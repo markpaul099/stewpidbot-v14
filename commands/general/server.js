@@ -7,7 +7,7 @@ module.exports = {
 		.setDescription("Provides information about the server"),
 	async execute(interaction) {
 		try {
-			await interaction.deferReply({ flags: [MessageFlags.Ephemeral], withResponse: true });
+			await interaction.deferReply({ flags: [MessageFlags.Ephemeral] });
 
 			const guild = await interaction.client.guilds.cache.get(interaction.guild.id);
 			const serverOwnerName = await interaction.guild.fetchOwner();
@@ -45,16 +45,16 @@ module.exports = {
 				},
 			};
 			await interaction.editReply({ embeds: [embed] });
-			setTimeout(() => interaction.deleteReply(), 60000);
+			setTimeout(() => interaction.deleteReply().catch(() => { /* Catch */ }), 60000);
 		} catch (error) {
 			console.error("Error in server command:", error);
 			const errorMessage = "An error occurred while fetching server information. Please try again.";
-			if (interaction.deferred) {
-				await interaction.editReply(errorMessage);
+			if (interaction.deferred || interaction.replied) {
+				await interaction.editReply({ content: errorMessage }).catch(() => { /* Catch */ });
 			} else {
-				await interaction.reply(errorMessage);
+				await interaction.reply({ content: errorMessage, flags: [MessageFlags.Ephemeral] }).catch(() => { /* Catch */ });
 			}
-			setTimeout(() => interaction.deleteReply(), 10000);
+			setTimeout(() => interaction.deleteReply().catch(() => { /* Catch */ }), 10000);
 		}
 	},
 };

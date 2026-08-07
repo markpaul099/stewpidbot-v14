@@ -6,10 +6,7 @@ module.exports = {
 		.setDescription("Checks the bot's connection and latency."),
 	async execute(interaction) {
 		try {
-			const response = await interaction.deferReply({
-				flags: [MessageFlags.Ephemeral],
-				withResponse: true,
-			});
+			const response = await interaction.deferReply({ flags: [MessageFlags.Ephemeral], withResponse: true });
 
 			const roundTripLatency = response.resource.message.createdTimestamp - interaction.createdTimestamp;
 			const websocketLatency = interaction.client.ws.ping;
@@ -28,13 +25,17 @@ module.exports = {
 				.setTimestamp();
 
 			await interaction.editReply({ embeds: [pingEmbed] });
+			setTimeout(() => interaction.deleteReply().catch(() => { /* Catch */ }), 60000);
 
 		} catch (error) {
 			console.error("[Ping Command] Failed to execute:", error);
 
 			if (interaction.deferred || interaction.replied) {
 				await interaction.editReply({ content: "❌ Could not calculate ping." }).catch(() => { /* Catch */ });
+			} else {
+				await interaction.reply({ content: "❌ Could not calculate ping.", flags: [MessageFlags.Ephemeral] }).catch(() => { /* Catch */ });
 			}
+			setTimeout(() => interaction.deleteReply().catch(() => { /* Catch */ }), 10000);
 		}
 	},
 };

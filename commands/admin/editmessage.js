@@ -23,7 +23,7 @@ module.exports = {
 		.setDefaultMemberPermissions(PermissionFlagsBits.Administrator),
 	async execute(interaction) {
 		try {
-			await interaction.deferReply({ flags: [MessageFlags.Ephemeral], withResponse: true });
+			await interaction.deferReply({ flags: [MessageFlags.Ephemeral] });
 			const channelName = interaction.options.getChannel("channel");
 			const msgId = interaction.options.getString("message");
 			const description = interaction.options.getString("content").replace(/\\n/g, "\r\n");
@@ -33,16 +33,16 @@ module.exports = {
 
 			await message.edit(description);
 			await interaction.editReply("Edited the message.");
-			setTimeout(() => interaction.deleteReply(), 5000);
+			setTimeout(() => interaction.deleteReply().catch(() => { /* Catch */ }), 5000);
 		} catch (error) {
 			console.error("Error in editmessage command:", error);
 			const errorMessage = "An error occurred while editing the message. Please try again.";
-			if (interaction.deferred) {
-				await interaction.editReply(errorMessage);
+			if (interaction.deferred || interaction.replied) {
+				await interaction.editReply({ content: errorMessage }).catch(() => { /* Catch */ });
 			} else {
-				await interaction.reply(errorMessage);
+				await interaction.reply({ content: errorMessage, flags: [MessageFlags.Ephemeral] }).catch(() => { /* Catch */ });
 			}
-			setTimeout(() => interaction.deleteReply(), 10000);
+			setTimeout(() => interaction.deleteReply().catch(() => { /* Catch */ }), 10000);
 		}
 	},
 };
