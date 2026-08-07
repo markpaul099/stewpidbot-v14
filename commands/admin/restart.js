@@ -3,28 +3,28 @@ const { SlashCommandBuilder, PermissionFlagsBits, MessageFlags } = require("disc
 module.exports = {
 	data: new SlashCommandBuilder()
 		.setName("restart")
-		.setDescription("Restart Bot")
+		.setDescription("Restart the bot (Requires PM2 or similar process manager)")
 		.setDefaultMemberPermissions(PermissionFlagsBits.Administrator),
+
 	async execute(interaction) {
 		try {
-			await interaction.deferReply({ flags: [MessageFlags.Ephemeral], withResponse: true });
-			// Shutdown bot and let PM2 restart the bot
-			await interaction.editReply("Restarting...");
-			setTimeout(() =>
-				interaction.editReply("Bot Restarted").catch(() => {/* Catch */ }), 3000);
-
+			await interaction.deferReply({ flags: [MessageFlags.Ephemeral] });
+			await interaction.editReply({ content: "Restarting... bot will be back shortly." }).catch(() => { /* Catch */ });
 			setTimeout(() => {
 				interaction.client.destroy();
 				process.exit(0);
-			}, 4000);
+			}, 2000);
+
 		} catch (error) {
 			console.error("Error in restart command:", error);
-			const errorMessage = "An error occurred while restarting the bot.";
-			if (interaction.deferred) {
-				await interaction.editReply(errorMessage);
+			const errorMessage = "An error occurred while attempting to restart the bot.";
+
+			if (interaction.deferred || interaction.replied) {
+				await interaction.editReply({ content: errorMessage }).catch(() => { /* Catch */ });
 			} else {
-				await interaction.reply(errorMessage);
+				await interaction.reply({ content: errorMessage, flags: [MessageFlags.Ephemeral] }).catch(() => { /* Catch */ });
 			}
+			setTimeout(() => interaction.deleteReply().catch(() => { /* Catch */ }), 10000);
 		}
 	},
 };
