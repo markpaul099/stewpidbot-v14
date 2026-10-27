@@ -1,6 +1,6 @@
 {
     "name": "stewpidbot-v14",
-    "version": "1.0.1",
+    "version": "2.0.0",
     "description": "A private Discord bot",
     "main": "index.js",
     "engines": {
