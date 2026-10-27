@@ -1,4 +1,5 @@
-const { SlashCommandBuilder } = require("discord.js");
+const { SlashCommandBuilder, MessageFlags } = require("discord.js");
+const { inCommandChannel } = require("../../utils/channels.js");
 const { RockPaperScissors } = require("discord-gamecord");
 
 module.exports = {
@@ -12,16 +13,7 @@ module.exports = {
 				.setRequired(true)),
 	async execute(interaction) {
 		try {
-			const cmdChannel = interaction.guild.channels.cache.find(c => c.name === process.env.commandChannel);
-			if (cmdChannel.id !== interaction.channel.id) {
-				await interaction.reply(
-					`use ${cmdChannel} for game commands`,
-				);
-				setTimeout(() => {
-					interaction.deleteReply();
-				}, 5000);
-				return;
-			}
+			if (!(await inCommandChannel(interaction))) return;
 
 			const opponent = interaction.options.getUser("opponent");
 			if (opponent.bot) {
@@ -61,14 +53,14 @@ module.exports = {
 				playerOnlyMessage: "only {player} and {opponent} can use these buttons.",
 			});
 
-			Game.startGame();
+			await Game.startGame();
 		} catch (error) {
 			console.error("Error in rps command:", error);
 			const errorMessage = "An error occurred while starting the game. Please try again.";
 			if (interaction.replied || interaction.deferred) {
-				await interaction.followUp({ content: errorMessage, ephemeral: true });
+				await interaction.followUp({ content: errorMessage, flags: [MessageFlags.Ephemeral] }).catch(() => { /* Catch */ });
 			} else {
-				await interaction.reply({ content: errorMessage, ephemeral: true });
+				await interaction.reply({ content: errorMessage, flags: [MessageFlags.Ephemeral] }).catch(() => { /* Catch */ });
 			}
 		}
 	},

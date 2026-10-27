@@ -1,4 +1,5 @@
 const { SlashCommandBuilder, EmbedBuilder, PermissionFlagsBits, MessageFlags } = require("discord.js");
+const { findChannel } = require("../../utils/channels.js");
 
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -56,11 +57,9 @@ module.exports = {
 			await interaction.editReply({ embeds: [embed] }).catch(() => { /* Catch */ });
 			setTimeout(() => interaction.deleteReply().catch(() => { /* Catch */ }), 10000);
 
-			if (process.env.logsChannel) {
-				const logs = interaction.guild.channels.cache.find(c => c.name === process.env.logsChannel);
-				if (logs) {
-					await logs.send({ embeds: [embed] }).catch(() => { /* Catch */ });
-				}
+			const logs = findChannel(interaction.guild, process.env.logsChannel);
+			if (logs) {
+				await logs.send({ embeds: [embed] }).catch(() => { /* Catch */ });
 			}
 
 		} catch (error) {
