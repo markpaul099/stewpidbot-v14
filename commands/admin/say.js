@@ -1,5 +1,6 @@
 const { SlashCommandBuilder, PermissionFlagsBits, MessageFlags } = require("discord.js");
 const { requireOwner } = require("../../utils/permissions.js");
+const { unescapeNewlines } = require("../../utils/format.js");
 
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -18,7 +19,7 @@ module.exports = {
 			if (!(await requireOwner(interaction))) return;
 			await interaction.deferReply({ flags: [MessageFlags.Ephemeral] });
 
-			const content = interaction.options.getString("message").replace(/\\n/g, "\n");
+			const content = unescapeNewlines(interaction.options.getString("message"));
 			await interaction.channel.send(content);
 
 			await interaction.editReply({ content: "Sent." }).catch(() => { /* Catch */ });

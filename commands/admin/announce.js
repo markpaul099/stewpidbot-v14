@@ -1,5 +1,6 @@
 const { SlashCommandBuilder, PermissionFlagsBits, MessageFlags } = require("discord.js");
 const { findChannel } = require("../../utils/channels.js");
+const { unescapeNewlines } = require("../../utils/format.js");
 
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -30,7 +31,7 @@ module.exports = {
 				return;
 			}
 
-			const content = interaction.options.getString("message").replace(/\\n/g, "\n");
+			const content = unescapeNewlines(interaction.options.getString("message"));
 			await newsChannel.send(content);
 
 			await interaction.editReply({ content: `Posted in ${newsChannel}.` }).catch(() => { /* Catch */ });

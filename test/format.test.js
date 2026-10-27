@@ -1,6 +1,6 @@
 const { describe, it } = require("node:test");
 const assert = require("node:assert/strict");
-const { formatDuration } = require("../utils/format.js");
+const { formatDuration, parseHexColor, unescapeNewlines } = require("../utils/format.js");
 
 const SECOND = 1000;
 const MINUTE = 60 * SECOND;
@@ -24,5 +24,33 @@ describe("formatDuration", () => {
 	it("shows zero seconds for zero or negative input", () => {
 		assert.equal(formatDuration(0), "0 secs");
 		assert.equal(formatDuration(-500), "0 secs");
+	});
+});
+
+describe("parseHexColor", () => {
+	it("parses 6-digit colors with or without #", () => {
+		assert.equal(parseHexColor("#2B65EC"), 0x2B65EC);
+		assert.equal(parseHexColor("2b65ec"), 0x2B65EC);
+	});
+
+	it("expands 3-digit colors", () => {
+		assert.equal(parseHexColor("#fff"), 0xFFFFFF);
+		assert.equal(parseHexColor("#1a2"), 0x11AA22);
+	});
+
+	it("returns null for anything else", () => {
+		for (const input of [null, undefined, "", "red", "#12345", "#1234567", "#ggg"]) {
+			assert.equal(parseHexColor(input), null, String(input));
+		}
+	});
+});
+
+describe("unescapeNewlines", () => {
+	it("turns a typed backslash-n into a newline", () => {
+		assert.equal(unescapeNewlines("one\\ntwo\\nthree"), "one\ntwo\nthree");
+	});
+
+	it("leaves text without a typed backslash-n alone", () => {
+		assert.equal(unescapeNewlines("no breaks here"), "no breaks here");
 	});
 });
