@@ -3,7 +3,6 @@ const Canvas = require("canvas");
 const path = require("path");
 const { findChannel } = require("../utils/channels.js");
 const imagePath = path.join(__dirname, "..", "assets", "welcome.jpg");
-require("dotenv").config();
 
 module.exports = {
 	name: Events.GuildMemberAdd,

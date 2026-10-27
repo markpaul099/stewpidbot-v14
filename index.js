@@ -16,7 +16,7 @@ process.on("uncaughtException", (error) => {
 const { Client, Collection, GatewayIntentBits, Partials, Options } = require("discord.js");
 const fs = require("node:fs");
 const path = require("node:path");
-require("dotenv").config();
+require("./utils/env.js");
 
 // Create a new client instance
 const client = new Client ({

@@ -14,7 +14,7 @@ Built with [discord.js](https://discord.js.org) v14.
 
 ## Requirements
 
-- Node.js 20.9 or newer
+- Node.js 20.12 or newer
 - A Discord application with a bot user ([Developer Portal](https://discord.com/developers/applications))
   - Under **Bot → Privileged Gateway Intents**, enable **Server Members Intent** and **Message Content Intent**
 - [node-canvas](https://github.com/Automattic/node-canvas) v3 for the welcome image. `npm ci` downloads a prebuilt binary on macOS (x64 and Apple silicon), Linux x64 (glibc) and Windows x64. On other platforms (for example Alpine/musl or ARM Linux such as a Raspberry Pi), it compiles from source and needs Cairo, Pango and a build toolchain first. See the v3 [Compiling](https://github.com/Automattic/node-canvas/tree/v3.2.3#compiling) section for the one-line install command for your OS. (node-canvas's main README now describes the v4 pre-release, which needs Node.js 22.)
