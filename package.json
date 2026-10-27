@@ -3,6 +3,9 @@
     "version": "1.0.0",
     "description": "A private Discord bot",
     "main": "index.js",
+    "engines": {
+        "node": ">=20.9.0"
+    },
     "Author": "markpaul099",
     "license": "Apache-2.0",
     "homepage": "https://github.com/markpaul099/stewpidbot-v14#readme",
@@ -11,28 +14,21 @@
         "url": "https://github.com/markpaul099/stewpidbot-v14.git"
     },
     "dependencies": {
-        "@discord-player/extractor": "^4.5.1",
-        "@discordjs/voice": "^0.16.1",
-        "@markpaul099/discord-xp": "1.1.24",
-        "async": "^3.2.6",
         "canvas": "^3.2.3",
-        "cron": "^2.4.4",
         "discord-anti-spam": "^2.8.1",
-        "discord-api-types": "^0.37.120",
         "discord-gamecord": "^4.4.4",
-        "discord-player": "^6.7.1",
         "discord.js": "^14.27.0",
         "discordjs-reaction-role": "^3.1.0",
         "dotenv": "^16.6.1",
-        "mediaplex": "^0.0.8",
         "moment": "^2.31.0",
         "moment-duration-format": "^2.3.2",
-        "ping": "^0.4.4",
-        "pm2": "^7.1.1",
-        "youtube-ext": "^1.1.25"
+        "ping": "^0.4.4"
     },
-    "script": {
-        "lint": "eslint"
+    "scripts": {
+        "start": "node index.js",
+        "deploy": "node deploy-commands.js",
+        "delete-commands": "node delete-commands.js",
+        "lint": "eslint ."
     },
     "keywords": [
         "Discord",
@@ -41,7 +37,8 @@
     "devDependencies": {
         "@typescript-eslint/eslint-plugin": "^5.45.1",
         "@typescript-eslint/parser": "^5.45.1",
-        "eslint": "^8.38.0"
+        "eslint": "^8.38.0",
+        "pm2": "^7.1.1"
     },
     "allowScripts": {
         "canvas@3.2.3": true
