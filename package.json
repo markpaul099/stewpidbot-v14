@@ -15,7 +15,7 @@
         "@discordjs/voice": "^0.16.1",
         "@markpaul099/discord-xp": "1.1.24",
         "async": "^3.2.6",
-        "canvas": "^2.11.2",
+        "canvas": "^3.2.3",
         "cron": "^2.4.4",
         "discord-anti-spam": "^2.8.1",
         "discord-api-types": "^0.37.120",
@@ -42,5 +42,8 @@
         "@typescript-eslint/eslint-plugin": "^5.45.1",
         "@typescript-eslint/parser": "^5.45.1",
         "eslint": "^8.38.0"
+    },
+    "allowScripts": {
+        "canvas@3.2.3": true
     }
 }
