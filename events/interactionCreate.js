@@ -1,10 +1,15 @@
-const { Events } = require("discord.js");
+const { Events, MessageFlags } = require("discord.js");
 
 module.exports = {
 	name: Events.InteractionCreate,
 	once: false,
 	async execute(interaction) {
 		if (!interaction.isChatInputCommand()) return;
+
+		if (!interaction.inGuild()) {
+			await interaction.reply({ content: "Commands only work in servers.", flags: [MessageFlags.Ephemeral] }).catch(() => { /* Catch */ });
+			return;
+		}
 
 		const command = interaction.client.commands.get(interaction.commandName);
 

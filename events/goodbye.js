@@ -1,4 +1,5 @@
 const { Events, EmbedBuilder } = require("discord.js");
+const { findChannel } = require("../utils/channels.js");
 
 module.exports = {
 	name: Events.GuildMemberRemove,
@@ -10,7 +11,8 @@ module.exports = {
 			if (member.user.bot) return;
 
 			// LOGS' Channel
-			const logsChannel = member.guild.channels.cache.find(c => c.name === process.env.logsChannel);
+			const logsChannel = findChannel(member.guild, process.env.logsChannel);
+			if (!logsChannel) return;
 
 			// Create Embed
 			const embed = new EmbedBuilder()
@@ -22,7 +24,7 @@ module.exports = {
 				.setFooter({ text: `${member.client.user.username} Bot`, iconURL: member.client.user.displayAvatarURL({ dynamic: true, size: 2048, extension: "png" }) });
 
 			// Send Message
-			logsChannel.send({ embeds: [embed] });
+			await logsChannel.send({ embeds: [embed] }).catch(error => console.error("Error sending goodbye message:", error));
 		}
 	},
 };

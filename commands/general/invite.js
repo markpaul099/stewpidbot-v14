@@ -1,4 +1,5 @@
 const { SlashCommandBuilder, MessageFlags } = require("discord.js");
+const { findChannel } = require("../../utils/channels.js");
 
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -7,8 +8,8 @@ module.exports = {
 	async execute(interaction) {
 		try {
 			await interaction.deferReply({ flags: [MessageFlags.Ephemeral] });
-			const welcome = await interaction.guild.channels.cache.find(channel => channel.name === process.env.welcomeChannel);
-			const invLink = await welcome.createInvite();
+			const inviteChannel = findChannel(interaction.guild, process.env.welcomeChannel) ?? interaction.channel;
+			const invLink = await inviteChannel.createInvite();
 			await interaction.editReply(`Invite link: ${invLink}`);
 			setTimeout(() => interaction.deleteReply().catch(() => { /* Catch */ }), 60000);
 		} catch (error) {

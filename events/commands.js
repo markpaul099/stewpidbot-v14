@@ -1,4 +1,5 @@
 const { Events, PermissionFlagsBits } = require("discord.js");
+const { findChannel } = require("../utils/channels.js");
 
 module.exports = {
 	name: Events.MessageCreate,
@@ -6,6 +7,7 @@ module.exports = {
 	once: false,
 
 	async execute(message) {
+		if (!message.guild || message.author.bot) return;
 		{
 			if (message.content.startsWith(`${process.env.prefix}say`)) {
 				if (message.author.id == process.env.botOwnerId) {
@@ -21,8 +23,8 @@ module.exports = {
 					});
 				}
 			} else if (message.content.startsWith(`${process.env.prefix}announce`)) {
-				const AC = await message.guild.channels.cache.find(c => c.name === process.env.newsChannel);
-				if (message.member.permissionsIn(AC).has(PermissionFlagsBits.SendMessages)) {
+				const AC = findChannel(message.guild, process.env.newsChannel);
+				if (AC && message.member.permissionsIn(AC).has(PermissionFlagsBits.SendMessages)) {
 					message.delete();
 					let sentence = message.content.split(" ");
 					sentence.shift();

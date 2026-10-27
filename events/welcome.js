@@ -1,6 +1,7 @@
 const { AttachmentBuilder, Events, Colors, ChannelType } = require("discord.js");
 const Canvas = require("canvas");
 const path = require("path");
+const { findChannel } = require("../utils/channels.js");
 const imagePath = path.join(__dirname, "..", "assets", "welcome.jpg");
 require("dotenv").config();
 
@@ -26,7 +27,7 @@ module.exports = {
 			}
 		}
 
-		let welcomeChannel = member.guild.channels.cache.find(c => c.name === process.env.welcomeChannel);
+		let welcomeChannel = findChannel(member.guild, process.env.welcomeChannel);
 		if (!welcomeChannel) {
 			try {
 				welcomeChannel = await member.guild.channels.create({
@@ -42,7 +43,7 @@ module.exports = {
 
 		const invite = await welcomeChannel.createInvite({ maxAge: 604800, unique: true });
 
-		const memberCount = await member.guild.members.fetch().then(members => members.filter(m => !m.user.bot).size);
+		const memberCount = member.guild.memberCount;
 
 		const applyText = (canvas, text) => {
 			const context = canvas.getContext("2d");

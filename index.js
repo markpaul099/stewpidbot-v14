@@ -9,10 +9,6 @@ process.on("unhandledRejection", (error) => {
 });
 
 process.on("uncaughtException", (error) => {
-	if (error?.code === "ENOTFOUND" || error?.code === "EAI_AGAIN") {
-		console.warn("[Process Guard] Swallowed uncaught DNS exception:", error.message);
-		return;
-	}
 	console.error("[Process Guard] Uncaught Exception:", error);
 	process.exit(1);
 });

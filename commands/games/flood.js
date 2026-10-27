@@ -1,4 +1,5 @@
-const { SlashCommandBuilder } = require("discord.js");
+const { SlashCommandBuilder, MessageFlags } = require("discord.js");
+const { inCommandChannel } = require("../../utils/channels.js");
 const { Flood } = require("discord-gamecord");
 
 module.exports = {
@@ -15,36 +16,36 @@ module.exports = {
 					{ name: "Hard = 18", value: 18 },
 				)),
 	async execute(interaction) {
+		try {
+			if (!(await inCommandChannel(interaction))) return;
 
-		const cmdChannel = interaction.guild.channels.cache.find(c => c.name === process.env.commandChannel);
-		if (cmdChannel.id !== interaction.channel.id) {
-			interaction.reply(
-				`use ${cmdChannel} for game commands`,
-			);
-			setTimeout(() => {
-				interaction.deleteReply();
-			}, 5000);
-			return;
+			const dificulty = interaction.options.getNumber("dificulty") || 13;
+
+			const Game = new Flood({
+				message: interaction,
+				isSlashGame: true,
+				embed: {
+					title: "Flood",
+					color: "#5865F2",
+				},
+				difficulty: dificulty,
+				timeoutTime: 60000,
+				buttonStyle: "PRIMARY",
+				emojis: ["🟥", "🟦", "🟧", "🟪", "🟩"],
+				winMessage: "You won! You took **{turns}** turns.",
+				loseMessage: "You lost! You took **{turns}** turns.",
+				playerOnlyMessage: "Only {player} can use these buttons.",
+			});
+
+			await Game.startGame();
+		} catch (error) {
+			console.error("Error in flood command:", error);
+			const errorMessage = "An error occurred while starting the game. Please try again.";
+			if (interaction.replied || interaction.deferred) {
+				await interaction.followUp({ content: errorMessage, flags: [MessageFlags.Ephemeral] }).catch(() => { /* Catch */ });
+			} else {
+				await interaction.reply({ content: errorMessage, flags: [MessageFlags.Ephemeral] }).catch(() => { /* Catch */ });
+			}
 		}
-
-		const dificulty = interaction.options.getNumber("dificulty") || 13;
-
-		const Game = new Flood({
-			message: interaction,
-			isSlashGame: true,
-			embed: {
-				title: "Flood",
-				color: "#5865F2",
-			},
-			difficulty: dificulty,
-			timeoutTime: 60000,
-			buttonStyle: "PRIMARY",
-			emojis: ["🟥", "🟦", "🟧", "🟪", "🟩"],
-			winMessage: "You won! You took **{turns}** turns.",
-			loseMessage: "You lost! You took **{turns}** turns.",
-			playerOnlyMessage: "Only {player} can use these buttons.",
-		});
-
-		Game.startGame();
 	},
 };

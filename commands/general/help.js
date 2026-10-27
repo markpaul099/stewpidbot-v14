@@ -1,4 +1,5 @@
 const { SlashCommandBuilder, EmbedBuilder, MessageFlags } = require("discord.js");
+const { findChannel } = require("../../utils/channels.js");
 
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -8,14 +9,12 @@ module.exports = {
 		try {
 			await interaction.deferReply({ flags: [MessageFlags.Ephemeral] });
 
-			const cmdChannel = await interaction.guild.channels.cache.find(channel => channel.name === process.env.commandChannel);
-			if (cmdChannel.id !== interaction.channel.id) {
+			const cmdChannel = findChannel(interaction.guild, process.env.commandChannel);
+			if (cmdChannel && cmdChannel.id !== interaction.channelId) {
 				await interaction.editReply(
 					`use ${cmdChannel} for help command`,
 				);
-				setTimeout(() => {
-					interaction.deleteReply();
-				}, 5000);
+				setTimeout(() => interaction.deleteReply().catch(() => { /* Catch */ }), 5000);
 				return;
 			}
 			const embed = new EmbedBuilder()
@@ -29,7 +28,7 @@ module.exports = {
 **/server** - See server stats
 **/uptime** - Bot's uptime\n
 ` },
-				{ name: "Games", value: `Only work in ${cmdChannel}
+				{ name: "Games", value: `${cmdChannel ? `Only work in ${cmdChannel}` : ""}
 **/2048** - Slide the Tiles
 **/connect** - Connect 4 Dots
 **/findfruit** - Find Fruit
