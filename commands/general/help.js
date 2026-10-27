@@ -22,11 +22,14 @@ module.exports = {
 				.setTitle("Commands")
 				.setAuthor({ name: `${interaction.member.displayName} used /help`, iconURL: interaction.user.displayAvatarURL({ dynamic: true, size: 2048, extension: "png" }) })
 				.addFields({ name: "General", value: `**/help** - Commands
+**/avatar** - See someone's avatar
 **/coinflip** - Flip a Coin!
 **/invite** - Invite link
 **/ping** - Bot's Ping
+**/poll** - Start a poll
 **/server** - See server stats
-**/uptime** - Bot's uptime\n
+**/uptime** - Bot's uptime
+**/userinfo** - See info about a user\n
 ` },
 				{ name: "Games", value: `${cmdChannel ? `Only work in ${cmdChannel}` : ""}
 **/2048** - Slide the Tiles

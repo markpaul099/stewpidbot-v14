@@ -6,9 +6,9 @@ Built with [discord.js](https://discord.js.org) v14.
 
 ## Features
 
-- **General:** `/help`, `/ping`, `/uptime`, `/server`, `/invite`, `/coinflip`
+- **General:** `/help`, `/ping`, `/uptime`, `/server`, `/invite`, `/coinflip`, `/userinfo`, `/avatar`, `/poll`
 - **Games:** `/2048`, `/connect`, `/findfruit`, `/flood`, `/matchfruit`, `/mine`, `/pokemon`, `/rps`, `/ttt`, `/trivia`
-- **Admin:** `/ban`, `/unban`, `/kick`, `/clear`, `/embed`, `/editembed`, `/editmessage`, `/addreaction`, `/announce` (posts to the news channel), `/restart`, `/test-in`, `/test-out`
+- **Admin:** `/ban`, `/unban`, `/kick`, `/timeout`, `/slowmode`, `/clear`, `/embed`, `/editembed`, `/editmessage`, `/addreaction`, `/announce` (posts to the news channel), `/restart`, `/test-in`, `/test-out`
 - **Bot owner only:** `/say`
 - **Automatic:** welcome image and role for new members, leave messages in the logs channel, anti-spam, reaction roles, auto-delete in the request channel
 

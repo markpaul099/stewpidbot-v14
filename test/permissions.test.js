@@ -1,7 +1,7 @@
 const { describe, it, beforeEach, afterEach } = require("node:test");
 const assert = require("node:assert/strict");
 const { MessageFlags } = require("discord.js");
-const { isBotOwner, requireOwner } = require("../utils/permissions.js");
+const { isBotOwner, requireOwner, moderationBlocker } = require("../utils/permissions.js");
 
 const OWNER_ID = "42";
 
@@ -52,5 +52,49 @@ describe("owner checks", () => {
 		assert.equal(await requireOwner(interaction), false);
 		assert.equal(interaction.replies.length, 1);
 		assert.deepEqual(interaction.replies[0].flags, [MessageFlags.Ephemeral]);
+	});
+});
+
+describe("moderationBlocker", () => {
+	const GUILD_OWNER = "owner";
+	const BOT = "bot";
+
+	function makeMember(id, position) {
+		return { id, displayName: `user-${id}`, roles: { highest: { position } } };
+	}
+
+	function makeInteraction({ moderatorId = "mod", moderatorPosition = 5, botPosition = 10 } = {}) {
+		const moderator = makeMember(moderatorId, moderatorPosition);
+		return {
+			user: { id: moderatorId },
+			member: moderator,
+			client: { user: { id: BOT } },
+			guild: { ownerId: GUILD_OWNER, members: { me: makeMember(BOT, botPosition) } },
+		};
+	}
+
+	it("allows a target below both the moderator and the bot", () => {
+		assert.equal(moderationBlocker(makeInteraction(), makeMember("t", 1), "ban"), null);
+	});
+
+	it("blocks targeting yourself, the bot or the server owner", () => {
+		const interaction = makeInteraction();
+		assert.match(moderationBlocker(interaction, makeMember("mod", 1), "ban"), /yourself/);
+		assert.match(moderationBlocker(interaction, makeMember(BOT, 1), "ban"), /myself/);
+		assert.match(moderationBlocker(interaction, makeMember(GUILD_OWNER, 1), "ban"), /server owner/);
+	});
+
+	it("blocks a target with an equal or higher role than the moderator", () => {
+		assert.match(moderationBlocker(makeInteraction(), makeMember("t", 5), "kick"), /You can't kick user-t/);
+	});
+
+	it("lets the server owner act regardless of their roles", () => {
+		const interaction = makeInteraction({ moderatorId: GUILD_OWNER, moderatorPosition: 0 });
+		assert.equal(moderationBlocker(interaction, makeMember("t", 5), "kick"), null);
+	});
+
+	it("blocks a target at or above the bot's highest role", () => {
+		const interaction = makeInteraction({ moderatorId: GUILD_OWNER, botPosition: 5 });
+		assert.match(moderationBlocker(interaction, makeMember("t", 5), "ban"), /I can't ban/);
 	});
 });
