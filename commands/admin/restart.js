@@ -1,13 +1,16 @@
 const { SlashCommandBuilder, PermissionFlagsBits, MessageFlags } = require("discord.js");
+const { requireOwner } = require("../../utils/permissions.js");
 
 module.exports = {
 	data: new SlashCommandBuilder()
 		.setName("restart")
-		.setDescription("Restart the bot (Requires PM2 or similar process manager)")
+		.setDescription("Restart the bot (bot owner only, needs PM2 or a similar process manager)")
 		.setDefaultMemberPermissions(PermissionFlagsBits.Administrator),
 
 	async execute(interaction) {
 		try {
+			// Restarting affects every server the bot is in, so only the owner may do it
+			if (!(await requireOwner(interaction))) return;
 			await interaction.deferReply({ flags: [MessageFlags.Ephemeral] });
 			await interaction.editReply({ content: "Restarting... bot will be back shortly." }).catch(() => { /* Catch */ });
 			setTimeout(() => {

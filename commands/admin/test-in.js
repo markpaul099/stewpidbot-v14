@@ -1,12 +1,14 @@
 const { SlashCommandBuilder, PermissionFlagsBits, MessageFlags } = require("discord.js");
+const { requireOwner } = require("../../utils/permissions.js");
 
 module.exports = {
 	data: new SlashCommandBuilder()
 		.setName("test-in")
-		.setDescription("Simulate Join")
+		.setDescription("Simulate Join (bot owner only)")
 		.setDefaultMemberPermissions(PermissionFlagsBits.Administrator),
 	async execute(interaction) {
 		try {
+			if (!(await requireOwner(interaction))) return;
 			await interaction.deferReply({ flags: [MessageFlags.Ephemeral] });
 			await interaction.client.emit("guildMemberAdd", interaction.member);
 			await interaction.editReply("Emitted GuildMemberAdd");
