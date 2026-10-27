@@ -8,8 +8,8 @@ Built with [discord.js](https://discord.js.org) v14.
 
 - **General:** `/help`, `/ping`, `/uptime`, `/server`, `/invite`, `/coinflip`
 - **Games:** `/2048`, `/connect`, `/findfruit`, `/flood`, `/matchfruit`, `/mine`, `/pokemon`, `/rps`, `/ttt`, `/trivia`
-- **Admin:** `/ban`, `/unban`, `/kick`, `/clear`, `/embed`, `/editembed`, `/editmessage`, `/addreaction`, `/restart`, `/test-in`, `/test-out`
-- **Text commands:** `~say` (bot owner only), `~announce` (posts to the news channel)
+- **Admin:** `/ban`, `/unban`, `/kick`, `/clear`, `/embed`, `/editembed`, `/editmessage`, `/addreaction`, `/announce` (posts to the news channel), `/restart`, `/test-in`, `/test-out`
+- **Bot owner only:** `/say`
 - **Automatic:** welcome image and role for new members, leave messages in the logs channel, anti-spam, reaction roles, auto-delete in the request channel
 
 ## Requirements
@@ -43,15 +43,14 @@ Built with [discord.js](https://discord.js.org) v14.
 |---|---|
 | `token` | Bot token |
 | `clientId` | Application ID, used by `npm run deploy` |
-| `prefix` | Prefix for text commands (default `~`) |
-| `botOwnerId` | Your user ID, allowed to use `~say` |
+| `botOwnerId` | Your user ID, allowed to use the bot owner commands |
 | `testAccount` | Optional user ID that is skipped by the welcome message |
 | `mongoUrl` | Not used yet (reserved for leveling) |
 | `logsChannel` | Channel name for moderation logs and leave messages |
 | `welcomeChannel` | Channel name for welcome images (created automatically if missing) |
 | `commandChannel` | Channel name where games and `/help` are allowed |
 | `requestChannel` | Channel name where messages are deleted after 60 seconds |
-| `newsChannel` | Channel name used by `~announce` |
+| `newsChannel` | Channel name used by `/announce` |
 | `newMemberRole` | Role name given to new members (created automatically if missing) |
 
 ### Channels
