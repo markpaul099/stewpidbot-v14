@@ -1,6 +1,14 @@
-const { Events } = require("discord.js");
+const { Events, Status } = require("discord.js");
 const networkState = require("../networkState.js");
 const connectivityTargets = ["https://discord.com/api/v10/gateway", "https://1.1.1.1"];
+const MAX_SILENCE_TIME = 90 * 1000;
+
+// Disconnected, or Ready but no heartbeat for too long
+function isConnectionUnhealthy(status, lastPingTimestamp, now = Date.now()) {
+	const isDisconnected = status === Status.Disconnected;
+	const isFrozen = status === Status.Ready && lastPingTimestamp > 0 && now - lastPingTimestamp > MAX_SILENCE_TIME;
+	return isDisconnected || isFrozen;
+}
 
 // Any HTTP response (even 4xx/5xx) means we reached the internet; only network errors or timeouts count as offline
 async function checkInternetAvailability() {
@@ -22,7 +30,6 @@ module.exports = {
 		console.log("[Watchdog] Modular file active. Monitoring connection health...");
 
 		const CHECK_INTERVAL = 30 * 1000;
-		const MAX_SILENCE_TIME = 90 * 1000;
 
 		const watchdogInterval = setInterval(async () => {
 			if (networkState.isInternetDown) return;
@@ -32,10 +39,7 @@ module.exports = {
 			const currentPingTimestamp = shard?.lastPingTimestamp || 0;
 			const timeSinceLastPing = Date.now() - currentPingTimestamp;
 
-			const isDisconnected = status === 4; // Status.Disconnected is 4
-			const isFrozen = status === 0 && currentPingTimestamp > 0 && timeSinceLastPing > MAX_SILENCE_TIME;
-
-			if (isDisconnected || isFrozen) {
+			if (isConnectionUnhealthy(status, currentPingTimestamp)) {
 				console.error(`[Watchdog] Network issue caught (Status Code: ${status}, Last Ping Age: ${timeSinceLastPing}ms).`);
 
 				// Flip flag to tell ready.js presence timer to instantly stop looping!
@@ -71,6 +75,10 @@ module.exports = {
 			}
 		}, CHECK_INTERVAL);
 	},
+
+	// Exposed for tests
+	checkInternetAvailability,
+	isConnectionUnhealthy,
 };
 
 function forceRestart(client) {

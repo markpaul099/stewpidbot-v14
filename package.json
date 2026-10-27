@@ -26,7 +26,8 @@
         "start": "node index.js",
         "deploy": "node deploy-commands.js",
         "delete-commands": "node delete-commands.js",
-        "lint": "eslint ."
+        "lint": "eslint .",
+        "test": "node --test"
     },
     "keywords": [
         "Discord",
