@@ -10,7 +10,6 @@ lerna-debug.log*
 report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
 
 # Custom
-package-lock.json
 config.json
 z-run-stewpidbot.sh
 .nvmrc
@@ -21,7 +20,6 @@ example-command.js
 react-config.js
 commands/admin/test.js
 events/cron.js.disabled
-commands/music
 .dockerignore
 Dockerfile
 .censitive

@@ -23,17 +23,10 @@ const client = new Client ({
 	intents: [
 		GatewayIntentBits.Guilds,
 		GatewayIntentBits.MessageContent,
-		GatewayIntentBits.GuildWebhooks,
-		GatewayIntentBits.GuildScheduledEvents,
 		GatewayIntentBits.GuildModeration,
 		GatewayIntentBits.GuildMessages,
 		GatewayIntentBits.GuildMessageReactions,
 		GatewayIntentBits.GuildMembers,
-		GatewayIntentBits.GuildInvites,
-		GatewayIntentBits.GuildIntegrations,
-		GatewayIntentBits.GuildEmojisAndStickers,
-		GatewayIntentBits.AutoModerationExecution,
-		GatewayIntentBits.GuildVoiceStates,
 	],
 	partials: [
 		Partials.User,
