@@ -16,7 +16,7 @@ module.exports = {
 				.setName("user")
 				.setDescription("Select a user to clear their message")
 				.setRequired(false))
-		.setDefaultMemberPermissions(PermissionFlagsBits.Administrator),
+		.setDefaultMemberPermissions(PermissionFlagsBits.ManageMessages),
 
 	async execute(interaction) {
 		try {
