@@ -18,7 +18,6 @@
         "discord-anti-spam": "^2.8.1",
         "discord-gamecord": "^4.4.4",
         "discord.js": "^14.27.0",
-        "discordjs-reaction-role": "^3.1.0",
         "dotenv": "^16.6.1",
         "moment": "^2.31.0",
         "moment-duration-format": "^2.3.2"
