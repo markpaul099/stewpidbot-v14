@@ -15,7 +15,6 @@
         "@discordjs/voice": "^0.16.1",
         "@markpaul099/discord-xp": "1.1.24",
         "async": "^3.2.6",
-        "canvacord": "^5.4.10",
         "canvas": "^2.11.2",
         "cron": "^2.4.4",
         "discord-anti-spam": "^2.8.1",
