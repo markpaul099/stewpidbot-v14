@@ -27,7 +27,7 @@ module.exports = {
 				await interaction.editReply({ embeds: [embed] }).catch(() => { /* Catch */ });
 				setTimeout(() => interaction.deleteReply().catch(() => { /* Catch */ }), 10000);
 
-			} catch (err) {
+			} catch {
 				const errEmbed = new EmbedBuilder()
 					.setDescription("Failed to unban. Please ensure you provided a valid user ID and that the user is actually banned.")
 					.setColor("#2B65EC");

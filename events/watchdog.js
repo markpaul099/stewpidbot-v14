@@ -8,7 +8,7 @@ async function checkInternetAvailability() {
 		try {
 			const res = await ping.promise.probe(ip, { timeout: 3 });
 			if (res.alive) return true;
-		} catch (e) {
+		} catch {
 			// Drop through silently
 		}
 	}
@@ -52,7 +52,7 @@ module.exports = {
 
 					try {
 						await client.destroy();
-					} catch (e) {
+					} catch {
 						/* Ignore active socket teardown errors */
 					}
 
@@ -74,7 +74,7 @@ module.exports = {
 };
 
 function forceRestart(client) {
-	try { client.destroy(); } catch (e) { /* Catch */ }
+	try { client.destroy(); } catch { /* Catch */ }
 	console.log("[Watchdog] Killing process for PM2 restart...");
 	process.exit(1);
 }
