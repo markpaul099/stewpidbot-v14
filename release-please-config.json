@@ -1,0 +1,12 @@
+{
+  "$schema": "https://raw.githubusercontent.com/googleapis/release-please/main/schemas/config.json",
+  "last-release-sha": "d5140179c16207d9b9579419871edc0e55f46f56",
+  "packages": {
+    ".": {
+      "release-type": "node",
+      "package-name": "stewpidbot-v14",
+      "include-component-in-tag": false,
+      "changelog-path": "CHANGELOG.md"
+    }
+  }
+}
