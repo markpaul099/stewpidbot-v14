@@ -1,13 +1,13 @@
 const { Events } = require("discord.js");
-const ping = require("ping");
 const networkState = require("../networkState.js");
-const fallbackIPs = ["1.1.1.1", "8.8.8.8", "9.9.9.9"];
+const connectivityTargets = ["https://discord.com/api/v10/gateway", "https://1.1.1.1"];
 
+// Any HTTP response (even 4xx/5xx) means we reached the internet; only network errors or timeouts count as offline
 async function checkInternetAvailability() {
-	for (const ip of fallbackIPs) {
+	for (const url of connectivityTargets) {
 		try {
-			const res = await ping.promise.probe(ip, { timeout: 3 });
-			if (res.alive) return true;
+			await fetch(url, { method: "HEAD", signal: AbortSignal.timeout(5000) });
+			return true;
 		} catch {
 			// Drop through silently
 		}
