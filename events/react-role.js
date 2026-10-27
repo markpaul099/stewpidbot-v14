@@ -71,4 +71,9 @@ module.exports = {
 		client.on(Events.MessageReactionAdd, (reaction, user) => handleReaction(config, reaction, user, "add"));
 		client.on(Events.MessageReactionRemove, (reaction, user) => handleReaction(config, reaction, user, "remove"));
 	},
+
+	// Exposed for tests
+	normalizeReaction,
+	findRoleId,
+	handleReaction,
 };
