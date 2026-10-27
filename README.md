@@ -6,15 +6,15 @@ Built with [discord.js](https://discord.js.org) v14.
 
 ## Features
 
-- **General:** `/help`, `/ping`, `/uptime`, `/server`, `/invite`, `/coinflip`
+- **General:** `/help`, `/ping`, `/uptime`, `/server`, `/invite`, `/coinflip`, `/userinfo`, `/avatar`, `/poll`
 - **Games:** `/2048`, `/connect`, `/findfruit`, `/flood`, `/matchfruit`, `/mine`, `/pokemon`, `/rps`, `/ttt`, `/trivia`
-- **Admin:** `/ban`, `/unban`, `/kick`, `/clear`, `/embed`, `/editembed`, `/editmessage`, `/addreaction`, `/restart`, `/test-in`, `/test-out`
-- **Text commands:** `~say` (bot owner only), `~announce` (posts to the news channel)
+- **Admin:** `/ban`, `/unban`, `/kick`, `/timeout`, `/slowmode`, `/clear`, `/embed`, `/editembed`, `/editmessage`, `/addreaction`, `/announce` (posts to the news channel)
+- **Bot owner only:** `/say`, `/restart`, `/test-in`, `/test-out`
 - **Automatic:** welcome image and role for new members, leave messages in the logs channel, anti-spam, reaction roles, auto-delete in the request channel
 
 ## Requirements
 
-- Node.js 20.9 or newer
+- Node.js 20.12 or newer
 - A Discord application with a bot user ([Developer Portal](https://discord.com/developers/applications))
   - Under **Bot → Privileged Gateway Intents**, enable **Server Members Intent** and **Message Content Intent**
 - [node-canvas](https://github.com/Automattic/node-canvas) v3 for the welcome image. `npm ci` downloads a prebuilt binary on macOS (x64 and Apple silicon), Linux x64 (glibc) and Windows x64. On other platforms (for example Alpine/musl or ARM Linux such as a Raspberry Pi), it compiles from source and needs Cairo, Pango and a build toolchain first. See the v3 [Compiling](https://github.com/Automattic/node-canvas/tree/v3.2.3#compiling) section for the one-line install command for your OS. (node-canvas's main README now describes the v4 pre-release, which needs Node.js 22.)
@@ -43,15 +43,14 @@ Built with [discord.js](https://discord.js.org) v14.
 |---|---|
 | `token` | Bot token |
 | `clientId` | Application ID, used by `npm run deploy` |
-| `prefix` | Prefix for text commands (default `~`) |
-| `botOwnerId` | Your user ID, allowed to use `~say` |
+| `botOwnerId` | Your user ID, allowed to use the bot owner commands |
 | `testAccount` | Optional user ID that is skipped by the welcome message |
 | `mongoUrl` | Not used yet (reserved for leveling) |
 | `logsChannel` | Channel name for moderation logs and leave messages |
 | `welcomeChannel` | Channel name for welcome images (created automatically if missing) |
 | `commandChannel` | Channel name where games and `/help` are allowed |
 | `requestChannel` | Channel name where messages are deleted after 60 seconds |
-| `newsChannel` | Channel name used by `~announce` |
+| `newsChannel` | Channel name used by `/announce` |
 | `newMemberRole` | Role name given to new members (created automatically if missing) |
 
 ### Channels

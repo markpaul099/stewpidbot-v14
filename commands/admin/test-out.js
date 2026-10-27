@@ -1,12 +1,14 @@
 const { SlashCommandBuilder, PermissionFlagsBits, MessageFlags } = require("discord.js");
+const { requireOwner } = require("../../utils/permissions.js");
 
 module.exports = {
 	data: new SlashCommandBuilder()
 		.setName("test-out")
-		.setDescription("Simulate a member leaving the server")
+		.setDescription("Simulate a member leaving the server (bot owner only)")
 		.setDefaultMemberPermissions(PermissionFlagsBits.Administrator),
 	async execute(interaction) {
 		try {
+			if (!(await requireOwner(interaction))) return;
 			await interaction.deferReply({ flags: [MessageFlags.Ephemeral] });
 			interaction.client.emit("guildMemberRemove", interaction.member);
 			await interaction.editReply({ content: "Successfully emitted `guildMemberRemove` event." }).catch(() => { /* Catch */ });

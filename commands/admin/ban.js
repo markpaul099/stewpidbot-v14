@@ -1,5 +1,6 @@
 const { SlashCommandBuilder, EmbedBuilder, PermissionFlagsBits, MessageFlags } = require("discord.js");
 const { findChannel } = require("../../utils/channels.js");
+const { moderationBlocker } = require("../../utils/permissions.js");
 
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -15,7 +16,7 @@ module.exports = {
 				.setName("reason")
 				.setDescription("The reason for the ban")
 				.setRequired(false))
-		.setDefaultMemberPermissions(PermissionFlagsBits.Administrator),
+		.setDefaultMemberPermissions(PermissionFlagsBits.BanMembers),
 
 	async execute(interaction) {
 		try {
@@ -25,26 +26,16 @@ module.exports = {
 			const reason = interaction.options.getString("reason") || "No reason provided";
 			const member = await interaction.guild.members.fetch(user.id).catch(() => null);
 
-			if (member) {
-				if (member.roles.highest.position >= interaction.member.roles.highest.position) {
-					const errEmbed = new EmbedBuilder()
-						.setDescription(`You can't take action on ${user.username} since they have a higher or equal role to yours.`)
-						.setColor("#152739");
+			// Users who aren't in the server can still be banned by ID
+			const blocker = member && moderationBlocker(interaction, member, "ban");
+			if (blocker) {
+				const errEmbed = new EmbedBuilder()
+					.setDescription(blocker)
+					.setColor("#152739");
 
-					await interaction.editReply({ embeds: [errEmbed] }).catch(() => { /* Catch */ });
-					setTimeout(() => interaction.deleteReply().catch(() => { /* Catch */ }), 10000);
-					return;
-				}
-
-				if (member.roles.highest.position >= interaction.guild.members.me.roles.highest.position) {
-					const errEmbed = new EmbedBuilder()
-						.setDescription(`I can't ban ${user.username} because their highest role is above or equal to mine.`)
-						.setColor("#152739");
-
-					await interaction.editReply({ embeds: [errEmbed] }).catch(() => { /* Catch */ });
-					setTimeout(() => interaction.deleteReply().catch(() => { /* Catch */ }), 10000);
-					return;
-				}
+				await interaction.editReply({ embeds: [errEmbed] }).catch(() => { /* Catch */ });
+				setTimeout(() => interaction.deleteReply().catch(() => { /* Catch */ }), 10000);
+				return;
 			}
 
 			await interaction.guild.members.ban(user.id, { reason: reason });

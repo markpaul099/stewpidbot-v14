@@ -4,7 +4,7 @@
     "description": "A private Discord bot",
     "main": "index.js",
     "engines": {
-        "node": ">=20.9.0"
+        "node": ">=20.12.0"
     },
     "Author": "markpaul099",
     "license": "Apache-2.0",
@@ -17,10 +17,7 @@
         "canvas": "^3.2.3",
         "discord-anti-spam": "^2.8.1",
         "discord-gamecord": "^4.4.4",
-        "discord.js": "^14.27.0",
-        "dotenv": "^16.6.1",
-        "moment": "^2.31.0",
-        "moment-duration-format": "^2.3.2"
+        "discord.js": "^14.27.0"
     },
     "scripts": {
         "start": "node index.js",

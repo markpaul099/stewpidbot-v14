@@ -8,7 +8,7 @@ const foldersPath = path.join(__dirname, "commands");
 const commandFolders = fs.readdirSync(foldersPath);
 
 // Load config
-require("dotenv").config();
+require("./utils/env.js");
 
 // Grab the SlashCommandBuilder#toJSON() output of each command's data for deployment
 for (const folder of commandFolders) {

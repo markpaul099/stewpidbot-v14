@@ -1,4 +1,6 @@
 const { SlashCommandBuilder, EmbedBuilder, PermissionFlagsBits, MessageFlags } = require("discord.js");
+const { findChannel } = require("../../utils/channels.js");
+const { moderationBlocker } = require("../../utils/permissions.js");
 
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -14,22 +16,25 @@ module.exports = {
 				.setName("reason")
 				.setDescription("The reason for the kick")
 				.setRequired(false))
-		.setDefaultMemberPermissions(PermissionFlagsBits.Administrator),
+		.setDefaultMemberPermissions(PermissionFlagsBits.KickMembers),
 	async execute(interaction) {
 		try {
 			await interaction.deferReply({ flags: [MessageFlags.Ephemeral] });
 			const user = interaction.options.getUser("user");
 			const reason = interaction.options.getString("reason") || "No reason provided";
 
-			const member = await interaction.guild.members.fetch(user.id);
-			console.log(member);
+			const member = await interaction.guild.members.fetch(user.id).catch(() => null);
+			const errEmbed = new EmbedBuilder().setColor("#2B65EC");
 
-			const errEmbed = new EmbedBuilder()
-				.setDescription(`You can't take action on ${member.displayName} since they have a higher role.`)
-				.setColor("#2B65EC");
+			if (!member) {
+				await interaction.editReply({ embeds: [errEmbed.setDescription(`${user.username} is not in this server.`)] }).catch(() => { /* Catch */ });
+				setTimeout(() => interaction.deleteReply().catch(() => { /* Catch */ }), 10000);
+				return;
+			}
 
-			if (member.roles.highest.position >= interaction.member.roles.highest.position) {
-				await interaction.editReply({ embeds: [errEmbed] });
+			const blocker = moderationBlocker(interaction, member, "kick");
+			if (blocker) {
+				await interaction.editReply({ embeds: [errEmbed.setDescription(blocker)] }).catch(() => { /* Catch */ });
 				setTimeout(() => interaction.deleteReply().catch(() => { /* Catch */ }), 10000);
 				return;
 			}
@@ -37,12 +42,17 @@ module.exports = {
 			await member.kick(reason);
 
 			const embed = new EmbedBuilder()
-				.setDescription(`Succesfully kicked ${member.displayName} with reason:\n ${reason}`)
+				.setDescription(`Successfully kicked ${member.displayName} with reason:\n${reason}\nUser ID: ${user.id}`)
 				.setColor("#2B65EC")
 				.setTimestamp();
 
-			await interaction.editReply({ embeds: [embed] });
+			await interaction.editReply({ embeds: [embed] }).catch(() => { /* Catch */ });
 			setTimeout(() => interaction.deleteReply().catch(() => { /* Catch */ }), 10000);
+
+			const logs = findChannel(interaction.guild, process.env.logsChannel);
+			if (logs) {
+				await logs.send({ embeds: [embed] }).catch(() => { /* Catch */ });
+			}
 		} catch (error) {
 			console.error("Error in kick command:", error);
 			const errorMessage = "An error occurred while kicking the user. Please try again.";

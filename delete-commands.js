@@ -1,7 +1,7 @@
 const { REST, Routes } = require("discord.js");
 
 // Load config
-require("dotenv").config();
+require("./utils/env.js");
 
 const rest = new REST({ version: 10 }).setToken(process.env.token);
 

@@ -1,9 +1,10 @@
 const { SlashCommandBuilder, PermissionFlagsBits, ChannelType, EmbedBuilder, MessageFlags } = require("discord.js");
+const { parseHexColor, unescapeNewlines } = require("../../utils/format.js");
 
 module.exports = {
 	data: new SlashCommandBuilder()
 		.setName("embed")
-		.setDescription("Add reaction to a comment")
+		.setDescription("Send an embed to a channel")
 		.addChannelOption(option =>
 			option
 				.setName("channel")
@@ -13,36 +14,47 @@ module.exports = {
 		.addStringOption(option =>
 			option
 				.setName("content")
-				.setDescription("Text inside the embed"))
+				.setDescription("Text inside the embed. Use \\n for a new line.")
+				.setMaxLength(4096))
 		.addStringOption(option =>
 			option
 				.setName("title")
-				.setDescription("Embed Title"))
+				.setDescription("Embed Title")
+				.setMaxLength(256))
 		.addStringOption(option =>
 			option
 				.setName("color")
-				.setDescription("Embed color (hex)"))
+				.setDescription("Embed color (hex, e.g. #2B65EC)"))
 		.setDefaultMemberPermissions(PermissionFlagsBits.Administrator),
 	async execute(interaction) {
 		try {
 			await interaction.deferReply({ flags: [MessageFlags.Ephemeral] });
-			const channelName = interaction.options.getChannel("channel");
+			const channel = interaction.options.getChannel("channel");
 			const content = interaction.options.getString("content");
-			const color = interaction.options.getString("color");
+			const colorInput = interaction.options.getString("color");
 			const title = interaction.options.getString("title");
 
-			const channel = interaction.guild.channels.cache.get(channelName.id);
+			let problem = null;
+			if (!content && !title) problem = "Give the embed a title, some content, or both.";
+			else if (colorInput && parseHexColor(colorInput) === null) problem = `\`${colorInput}\` is not a hex color. Try something like \`#2B65EC\`.`;
+
+			if (problem) {
+				await interaction.editReply({ content: problem }).catch(() => { /* Catch */ });
+				setTimeout(() => interaction.deleteReply().catch(() => { /* Catch */ }), 10000);
+				return;
+			}
+
 			const embed = new EmbedBuilder()
 				.setTitle(title)
-				.setColor(color)
-				.setDescription(content);
+				.setColor(colorInput ? parseHexColor(colorInput) : null)
+				.setDescription(content ? unescapeNewlines(content) : null);
 
 			await channel.send({ embeds: [embed] });
-			await interaction.editReply("embed sent.");
+			await interaction.editReply(`Embed sent to ${channel}.`);
 			setTimeout(() => interaction.deleteReply().catch(() => { /* Catch */ }), 5000);
 		} catch (error) {
 			console.error("Error in embed command:", error);
-			const errorMessage = "An error occurred while sending the embed. Please try again.";
+			const errorMessage = "An error occurred while sending the embed. Make sure I can send messages in that channel.";
 			if (interaction.deferred || interaction.replied) {
 				await interaction.editReply({ content: errorMessage }).catch(() => { /* Catch */ });
 			} else {

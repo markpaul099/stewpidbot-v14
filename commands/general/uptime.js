@@ -1,7 +1,6 @@
 const { SlashCommandBuilder, MessageFlags } = require("discord.js");
-const moment = require("moment");
 const os = require("os");
-require("moment-duration-format");
+const { formatDuration } = require("../../utils/format.js");
 
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -11,13 +10,8 @@ module.exports = {
 		try {
 			await interaction.deferReply({ flags: [MessageFlags.Ephemeral] });
 
-			const hostSeconds = os.uptime();
-			const hostMilliseconds = hostSeconds * 1000;
-
-			const hostUptime = moment.duration(hostMilliseconds).format(" D [days], H [hrs], m [mins], s [secs]");
-			const botUptime = moment.duration(interaction.client.uptime).format(" D [days], H [hrs], m [mins], s [secs]");
-
-			console.log(`${botUptime} - ${interaction.client.uptime} - ${hostUptime} - ${hostMilliseconds}`);
+			const hostUptime = formatDuration(os.uptime() * 1000);
+			const botUptime = formatDuration(interaction.client.uptime);
 
 			await interaction.editReply({
 				content: `Bot Uptime (${interaction.client.user}): ${botUptime}\nHost Uptime (Server): ${hostUptime}`,

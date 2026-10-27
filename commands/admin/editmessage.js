@@ -1,9 +1,10 @@
 const { SlashCommandBuilder, PermissionFlagsBits, ChannelType, MessageFlags } = require("discord.js");
+const { unescapeNewlines } = require("../../utils/format.js");
 
 module.exports = {
 	data: new SlashCommandBuilder()
 		.setName("editmessage")
-		.setDescription("Edit an already sent message")
+		.setDescription("Edit a message the bot already sent")
 		.addChannelOption(option =>
 			option
 				.setName("channel")
@@ -18,22 +19,28 @@ module.exports = {
 		.addStringOption(option =>
 			option
 				.setName("content")
-				.setDescription("Content of message")
-				.setRequired(true))
+				.setDescription("New content of the message. Use \\n for a new line.")
+				.setRequired(true)
+				.setMaxLength(2000))
 		.setDefaultMemberPermissions(PermissionFlagsBits.Administrator),
 	async execute(interaction) {
+		const replyAndExpire = async (content, ms = 10000) => {
+			await interaction.editReply({ content }).catch(() => { /* Catch */ });
+			setTimeout(() => interaction.deleteReply().catch(() => { /* Catch */ }), ms);
+		};
+
 		try {
 			await interaction.deferReply({ flags: [MessageFlags.Ephemeral] });
-			const channelName = interaction.options.getChannel("channel");
+			const channel = interaction.options.getChannel("channel");
 			const msgId = interaction.options.getString("message");
-			const description = interaction.options.getString("content").replace(/\\n/g, "\r\n");
+			const content = unescapeNewlines(interaction.options.getString("content"));
 
-			const channel = interaction.guild.channels.cache.get(channelName.id);
-			const message = await channel.messages.fetch(msgId);
+			const message = await channel.messages.fetch(msgId).catch(() => null);
+			if (!message) return await replyAndExpire(`Could not find a message with ID \`${msgId}\` in ${channel}.`);
+			if (message.author.id !== interaction.client.user.id) return await replyAndExpire("I can only edit messages that I sent.");
 
-			await message.edit(description);
-			await interaction.editReply("Edited the message.");
-			setTimeout(() => interaction.deleteReply().catch(() => { /* Catch */ }), 5000);
+			await message.edit(content);
+			await replyAndExpire("Edited the message.", 5000);
 		} catch (error) {
 			console.error("Error in editmessage command:", error);
 			const errorMessage = "An error occurred while editing the message. Please try again.";

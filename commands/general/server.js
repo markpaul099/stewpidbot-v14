@@ -1,5 +1,4 @@
-const { SlashCommandBuilder, MessageFlags } = require("discord.js");
-const moment = require("moment");
+const { SlashCommandBuilder, MessageFlags, TimestampStyles, time } = require("discord.js");
 
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -12,7 +11,8 @@ module.exports = {
 			const guild = await interaction.client.guilds.cache.get(interaction.guild.id);
 			const serverOwnerName = await interaction.guild.fetchOwner();
 			const guildmessageServerInfo = interaction.guild;
-			const createdAtServerInfo = moment(interaction.guild.createdAt).format("MMMM Do YYYY, h:mm:ss a");
+			// Discord timestamps render in each viewer's own timezone
+			const createdAtServerInfo = `${time(interaction.guild.createdAt, TimestampStyles.LongDateTime)} (${time(interaction.guild.createdAt, TimestampStyles.RelativeTime)})`;
 			const channelsServerInfo = interaction.guild.channels.cache.size;
 			const memberCountServerInfo = guild.members.cache.filter(member => !member.user.bot).size;
 			const botCountServerInfo = guild.members.cache.filter(member => member.user.bot).size;
