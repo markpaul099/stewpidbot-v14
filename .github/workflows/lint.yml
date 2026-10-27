@@ -1,0 +1,23 @@
+name: lint
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: npm
+      # Lint doesn't need canvas's native binary, so skip install scripts
+      - run: npm ci --ignore-scripts
+      - run: npm run lint

@@ -21,7 +21,7 @@ module.exports = {
 					color: Colors.Blue,
 					reason: "Roles for new members",
 				});
-			} catch (error) {
+			} catch {
 				console.log(`Tried to create a new member role in ${member.guild.name}, but I don't have permissions!`);
 				return;
 			}
@@ -35,7 +35,7 @@ module.exports = {
 					type: ChannelType.GuildText,
 					reason: "Auto-created welcome channel for new members",
 				});
-			} catch (error) {
+			} catch {
 				console.log(`Tried to create a welcome channel in ${member.guild.name}, but I don't have permissions!`);
 				return;
 			}
@@ -88,7 +88,7 @@ module.exports = {
 		await welcomeChannel.send({ content: `Hey <@${member.user.id}> Welcome to **${member.guild.name}** :two_hearts:!!!\nInvite Link: ${invite}\nPlease change your Discord nickname to your in-game name :)`, files: [attachment] });
 		try {
 			await member.roles.add(newRole);
-		} catch (error) {
+		} catch {
 			console.log(`Tried to add a role to ${member.user.id} in ${member.guild.name}, but I don't have permissions!`);
 		}
 	},
