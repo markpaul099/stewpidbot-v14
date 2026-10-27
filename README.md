@@ -25,7 +25,7 @@ Built with [discord.js](https://discord.js.org) v14.
    npm ci
    ```
 2. Copy `.env-sample` to `.env` and fill it in (see [Configuration](#configuration)).
-3. Optional: copy `react-config-sample.js` to `react-config.js` and set your reaction roles. Without it, reaction roles are disabled.
+3. Optional: copy `react-config-sample.js` to `react-config.js` and set your reaction roles. `reaction` can be a unicode emoji, a custom emoji id or a custom emoji string like `<:name:id>`. Without it, reaction roles are disabled.
 4. Register the slash commands with Discord:
    ```sh
    npm run deploy
