@@ -76,9 +76,22 @@ npx pm2 save
 
 ```sh
 npm run lint
+npm test
 ```
 
-Lint also runs on every pull request. Commit messages follow [Conventional Commits](https://www.conventionalcommits.org), which release-please uses to version releases and write the changelog.
+Lint and tests also run on every pull request.
+
+Two terminal checks help when setting up or changing the bot:
+
+```sh
+npm run check
+npm run smoke
+```
+
+- `npm run check` works offline. It checks `.env`, loads every command and event, and validates `react-config.js`, without connecting to Discord.
+- `npm run smoke` signs in once with the bot token and reports what the bot sees: whether the privileged intents are on, whether the deployed slash commands match `commands/` (run `npm run deploy` if not), and on every server the bot's permissions, the configured channels and the new member role. It only reads, then signs out, so it's safe to run while the bot is online.
+
+Both print `ok`, `warn` or `FAIL` per check and exit with code 1 when something failed. Warnings are features that will be skipped, not errors. Commit messages follow [Conventional Commits](https://www.conventionalcommits.org), which release-please uses to version releases and write the changelog.
 
 ## License
 
